@@ -1,0 +1,39 @@
+<ui:composition template="/WEB-INF/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="contenido">
+        <h:form>
+
+            <p:messages id="messages" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+
+            <p:panel header="Acceso de usuario">
+                <h:panelGrid id="grid" columns="2" cellpadding="5">
+
+                    <!-- Email -->
+                    <h:outputLabel for="email" value="Correo electrónico:" style="font-weight:bold;" />
+                    <p:inputText id="email" value="#{loginView.email}" required="true"
+                                 requiredMessage="Por favor, introduce tu email." />
+                    <p:message for="email" />
+
+                    <!-- Contraseña -->
+                    <h:outputLabel for="password" value="Contraseña:" style="font-weight:bold;" />
+                    <p:password id="password" value="#{loginView.password}" required="true"
+                                requiredMessage="Por favor, introduce tu contraseña." />
+                    <p:message for="password" />
+
+                </h:panelGrid>
+
+                <p:commandButton value="Entrar" action="#{loginView.login}"
+                                 update="messages" icon="pi pi-sign-in"
+                                 styleClass="ui-button-primary" />
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

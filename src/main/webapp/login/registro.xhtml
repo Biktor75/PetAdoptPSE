@@ -1,0 +1,54 @@
+<ui:composition template="/WEB-INF/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="contenido">
+        <h:form id="registroForm">
+            <f:event listener="#{registerView.validatePassword}" type="postValidate" />
+
+            <p:messages id="mensajes" closable="true" />
+
+            <p:panel header="Registro de usuario">
+                <h:panelGrid id="grid" columns="2" cellpadding="5">
+
+                    <h:outputLabel for="name" value="Nombre:" />
+                    <p:inputText id="name" value="#{registerView.name}" required="true" maxlength="30" />
+                    <p:message for="name" />
+
+                    <h:outputLabel for="email" value="Email:" />
+                    <p:inputText id="email" value="#{registerView.email}" required="true">
+                        <f:validator validatorId="emailValidator" />
+                    </p:inputText>
+                    <p:message for="email" />
+
+                    <h:outputLabel for="password" value="Contraseña:" />
+                    <p:password id="password" value="#{registerView.password}" required="true" 
+                                feedback="true" />
+                    <p:message for="password" />
+
+                    <h:outputLabel for="confirmPassword" value="Confirmar contraseña:" />
+                    <p:password id="confirmPassword" value="#{registerView.confirmPassword}" required="true" 
+                                feedback="true" />
+                    <p:message for="confirmPassword" />
+
+                    <h:outputLabel for="rol" value="Rol:" />
+                    <p:selectOneMenu id="rol" value="#{registerView.role}">
+                        <f:selectItem itemLabel="Cliente" itemValue="cliente" />
+                        <f:selectItem itemLabel="Refugio" itemValue="refugio" />
+                        <f:selectItem itemLabel="Admin" itemValue="admin" />
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+
+                <p:commandButton value="Registrarse"
+                                 action="#{registerView.register}"
+                                 update="mensajes"
+                                 icon="pi pi-user-plus" />
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
