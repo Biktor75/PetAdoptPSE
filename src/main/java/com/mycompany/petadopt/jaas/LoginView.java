@@ -1,9 +1,8 @@
 package com.mycompany.petadopt.jaas;
 
-import com.mycompany.petadopt.jaas.UserEJB;
 import com.mycompany.petadopt.entities.Users;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.inject.Inject;
 import javax.faces.application.FacesMessage;
@@ -11,10 +10,13 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
 @Named
-@RequestScoped
-public class LoginView {
+@SessionScoped
+public class LoginView implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String email;
     private String password;
@@ -27,36 +29,27 @@ public class LoginView {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 
-
         try {
-            request.login(email,password);
+            request.login(email, password);
             System.out.println("LOGIN OK - Usuario: " + email);
 
-        String[] roles = { "cliente", "Cliente", "users", "admin", "refugio" };
-        for (String r : roles) {
-            System.out.println("¿" + r + "? " + request.isUserInRole(r));
-        }
+            this.user = userEJB.findByEmail(request.getUserPrincipal().getName());
 
-        System.out.println("Principal: " + request.getUserPrincipal());
+            if (request.isUserInRole("admin")) {
+                return "/admin/privatepage.xhtml?faces-redirect=true";
+            } else if (request.isUserInRole("refugio")) {
+                return "/refugios/privatepage.xhtml?faces-redirect=true";
+            } else if (request.isUserInRole("cliente")) {
+                return "/clientes/privatepage.xhtml?faces-redirect=true";
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Rol no permitido.", null));
+                return "login";
+            }
+
         } catch (ServletException e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login incorrecto!", null));
             return "login";
         }
-
-        this.user = userEJB.findByEmail(request.getUserPrincipal().getName());
-        
-        if (request.isUserInRole("admin")) {
-            return "/admin/privatepage.xhtml?faces-redirect=true";
-        } else if (request.isUserInRole("refugio")) {
-            return "/refugio/inicio.xhtml?faces-redirect=true";
-        } else if (request.isUserInRole("cliente")) {
-            return "/clientes/privatepage.xhtml?faces-redirect=true";
-        } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Rol no permitido.", null));
-
-            return "login";
-        }
-
     }
 
     public String logout() {
@@ -76,7 +69,6 @@ public class LoginView {
         return user;
     }
 
-    // Getters y Setters
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
