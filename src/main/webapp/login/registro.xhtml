@@ -47,9 +47,9 @@
                 </p:panel>
             </h:form>
             <!--  Formulario Refugio  -->
-            <h:form id="formRefugio">
+            <h:form id="formRefugio" styleClass="ui-g-6" rendered="#{registerView.tipoUsuario eq 'refugio'}">
                 <h:inputHidden value="#{registerView.tipoUsuario}"/>
-                styleClass="ui-g-6" rendered="#{registerView.tipoUsuario eq 'refugio'}">
+                
                 <p:panel header="Formulario Refugio">
                     <p:panelGrid columns="2">
                         <h:outputLabel for="emailR" value="Email:"/>
