@@ -1,80 +1,63 @@
-<ui:composition template="/WEB-INF/template.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
-
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" template="/WEB-INF/template.xhtml">
     <ui:define name="contenido">
-        <h:form id="registroForm">
-            <p:messages id="mensajes" closable="true" />
-
-            <p:panel header="Registro de Usuario">
-                <p:panelGrid columns="2" columnClasses="label,value" styleClass="ui-fluid">
-
-                    <!-- Tipo de usuario -->
-                    <h:outputLabel for="tipoUsuario" value="Tipo de usuario:" />
-                    <p:selectOneMenu id="tipoUsuario" value="#{registerView.tipoUsuario}" required="true">
-                        <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
-                        <f:selectItem itemLabel="Cliente" itemValue="cliente" />
-                        <f:selectItem itemLabel="Refugio" itemValue="refugio" />
-                        <p:ajax update="registroForm" process="@this" />
-                    </p:selectOneMenu>
-
-                    <p:message for="tipoUsuario" />
-
-                    <!-- Email -->
-                    <h:outputLabel for="email" value="Email:" />
-                    <p:inputText id="email" value="#{registerView.email}" required="true" />
-
-                    <!-- Contraseña -->
-                    <h:outputLabel for="password" value="Contraseña:" />
-                    <p:password id="password" value="#{registerView.password}" required="true" />
-
-                    <!-- Confirmar contraseña -->
-                    <h:outputLabel for="confirmPassword" value="Confirmar contraseña:" />
-                    <p:password id="confirmPassword" value="#{registerView.confirmPassword}" required="true" />
-
-                    <!-- Nombre -->
-                    <h:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText id="nombre" value="#{registerView.nombre}" required="true" />
-
-                    <!-- Campos específicos para cliente -->
-                    <h:outputLabel for="apellidos" value="Apellidos:" rendered="#{registerView.tipoUsuario eq 'cliente'}" />
-                    <p:inputText id="apellidos" value="#{registerView.apellidos}" required="true" rendered="#{registerView.tipoUsuario eq 'cliente'}" />
-
-                    <h:outputLabel for="nif" value="NIF:" rendered="#{registerView.tipoUsuario eq 'cliente'}" />
-                    <p:inputText id="nif" value="#{registerView.nif}" required="true" rendered="#{registerView.tipoUsuario eq 'cliente'}" />
-
-                    <h:outputLabel for="fechaNacimiento" value="Fecha de nacimiento:" rendered="#{registerView.tipoUsuario eq 'cliente'}" />
-                    <p:calendar id="fechaNacimiento"
-                                value="#{registerView.fechaNacimiento}"
-                                pattern="dd/MM/yyyy"
-                                maxdate="#{registerView.fechaMaxima}"
-                                showButtonPanel="true"
-                                required="true"
-                                rendered="#{registerView.tipoUsuario eq 'cliente'}" />
-
-                    <!-- Campos específicos para refugio -->
-                    <h:outputLabel for="cif" value="CIF:" rendered="#{registerView.tipoUsuario eq 'refugio'}" />
-                    <p:inputText id="cif" value="#{registerView.cif}" required="true" rendered="#{registerView.tipoUsuario eq 'refugio'}" />
-
-                    <h:outputLabel for="domicilio" value="Domicilio:" />
-                    <p:inputText id="domicilio" value="#{registerView.domicilio}" required="true" />
-
-                    <h:outputLabel for="telefono" value="Teléfono:" />
-                    <p:inputMask id="telefono" value="#{registerView.telefono}" mask="999 999 999" required="true" />
-
-                </p:panelGrid>
-
-                <!-- Botón de depuración -->
-                <p:commandButton value="Registrarse"
-                                 action="#{registerView.registrar}"
-                                 process="registroForm"
-                                 update="registroForm mensajes"
-                                 icon="pi pi-user-plus"
-                                 styleClass="p-mt-3 ui-button-success" />
+        <h:form id="selectorForm">
+            <p:panel header="Seleccione tipo de usuario">
+                <p:selectOneButton value="#{registerView.tipoUsuario}">
+                    <f:selectItem itemLabel="Cliente" itemValue="cliente"/>
+                    <f:selectItem itemLabel="Refugio" itemValue="refugio"/>
+                    <p:ajax update="formularios"/>
+                </p:selectOneButton>
             </p:panel>
         </h:form>
+        <h:panelGroup id="formularios" layout="block" styleClass="ui-g">
+            <!--  Formulario Cliente  -->
+            <h:form id="formCliente">
+                <h:inputHidden value="#{registerView.tipoUsuario}"/>
+                styleClass="ui-g-6" rendered="#{registerView.tipoUsuario eq 'cliente'}">
+                <p:panel header="Formulario Cliente">
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="emailC" value="Email:"/>
+                        <p:inputText id="emailC" value="#{registerView.email}" required="true"/>
+                        <h:outputLabel for="passwordC" value="Contraseña:"/>
+                        <p:password id="passwordC" value="#{registerView.password}" required="true"/>
+                        <h:outputLabel for="confirmPasswordC" value="Confirmar contraseña:"/>
+                        <p:password id="confirmPasswordC" value="#{registerView.confirmPassword}" required="true"/>
+                        <h:outputLabel for="nombreC" value="Nombre:"/>
+                        <p:inputText id="nombreC" value="#{registerView.nombre}" required="true"/>
+                        <h:outputLabel for="apellidos" value="Apellidos:"/>
+                        <p:inputText id="apellidos" value="#{registerView.apellidos}" required="true"/>
+                        <h:outputLabel for="nif" value="NIF:"/>
+                        <p:inputText id="nif" value="#{registerView.nif}" required="true"/>
+                        <h:outputLabel for="fechaNacimiento" value="Fecha de nacimiento:"/>
+                        <p:calendar id="fechaNacimiento" value="#{registerView.fechaNacimiento}" pattern="dd/MM/yyyy"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Registrar Cliente" action="#{registerView.registrar}"/>
+                </p:panel>
+            </h:form>
+            <!--  Formulario Refugio  -->
+            <h:form id="formRefugio">
+                <h:inputHidden value="#{registerView.tipoUsuario}"/>
+                styleClass="ui-g-6" rendered="#{registerView.tipoUsuario eq 'refugio'}">
+                <p:panel header="Formulario Refugio">
+                    <p:panelGrid columns="2">
+                        <h:outputLabel for="emailR" value="Email:"/>
+                        <p:inputText id="emailR" value="#{registerView.email}" required="true"/>
+                        <h:outputLabel for="passwordR" value="Contraseña:"/>
+                        <p:password id="passwordR" value="#{registerView.password}" required="true"/>
+                        <h:outputLabel for="confirmPasswordR" value="Confirmar contraseña:"/>
+                        <p:password id="confirmPasswordR" value="#{registerView.confirmPassword}" required="true"/>
+                        <h:outputLabel for="nombreR" value="Nombre del refugio:"/>
+                        <p:inputText id="nombreR" value="#{registerView.nombre}" required="true"/>
+                        <h:outputLabel for="cif" value="CIF:"/>
+                        <p:inputText id="cif" value="#{registerView.cif}" required="true"/>
+                        <h:outputLabel for="domicilio" value="Domicilio:"/>
+                        <p:inputText id="domicilio" value="#{registerView.domicilio}" required="true"/>
+                        <h:outputLabel for="telefono" value="Teléfono:"/>
+                        <p:inputText id="telefono" value="#{registerView.telefono}" required="true"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Registrar Refugio" action="#{registerView.registrar}"/>
+                </p:panel>
+            </h:form>
+        </h:panelGroup>
     </ui:define>
 </ui:composition>
