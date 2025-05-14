@@ -88,5 +88,32 @@ public class UserEJB {
         e.printStackTrace();
     }
 }
+    public Refugios findRefugioByEmail(String email) {
+    try {
+        TypedQuery<Refugios> query = em.createQuery(
+            "SELECT r FROM Refugios r WHERE r.email = :email", Refugios.class);
+        query.setParameter("email", email);
+        return query.getSingleResult();
+    } catch (Exception e) {
+        System.out.println("❌ Error al buscar refugio por email:");
+        e.printStackTrace();
+        return null;
+    }
+}
+    public Clientes findClienteByEmail(String email) {
+    try {
+        TypedQuery<Clientes> query = em.createQuery(
+            "SELECT c FROM Clientes c WHERE c.email = :email", Clientes.class);
+        query.setParameter("email", email);
+        return query.getSingleResult();
+    } catch (Exception e) {
+        System.out.println("❌ Error al buscar cliente por email:");
+        e.printStackTrace();
+        return null;
+    }
+}
+
+
+
 
 }

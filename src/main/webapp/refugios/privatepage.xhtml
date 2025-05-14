@@ -1,14 +1,30 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
 
-    <body>
-        <h3>Hola #{loginView.authenticatedUser.name}</h3>
-        <p>Tu id de usuario es #{loginView.authenticatedUser.email}</p>
-        <p>Tienes el rol users?: #{request.isUserInRole('users')}</p>
-        <p>Tienes el rol admin?: #{request.isUserInRole('admin')}</p>
-        <p>Esta es una página privada, requiere acceso mediante 
-            password.</p>
-    </body>
-</html>
+    <ui:define name="contenido">
+        <h2>Área privada del refugio</h2>
+
+        <p>Bienvenido, <strong>#{loginView.authenticatedUser.nombre}</strong> 👋</p>
+
+        <p:panel header="Datos del refugio" style="margin-top:20px;">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel value="Correo:" />
+                <h:outputText value="#{loginView.authenticatedUser.email}" />
+
+                <h:outputLabel value="CIF:" />
+                <h:outputText value="#{refugioView.refugio.cif}" />
+
+                <h:outputLabel value="Domicilio:" />
+                <h:outputText value="#{refugioView.refugio.domicilio}" />
+
+                <h:outputLabel value="Teléfono:" />
+                <h:outputText value="#{refugioView.refugio.telefono}" />
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+</ui:composition>

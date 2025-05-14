@@ -1,14 +1,15 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="contenido">
+        <h2>Zona privada del administrador</h2>
+        <p>Bienvenido, <strong>#{loginView.authenticatedUser.nombre}</strong>.</p>
 
-    <body>
-        <h3>Hola #{loginView.authenticatedUser.name}</h3>
-        <p>Tu id de usuario es #{loginView.authenticatedUser.email}</p>
-        <p>Tienes el rol users?: #{request.isUserInRole('users')}</p>
-        <p>Tienes el rol admin?: #{request.isUserInRole('admin')}</p>
-        <p>Esta es una página privada, requiere acceso mediante 
-            password.</p>
-    </body>
-</html>
+        <p:panel header="Panel de control">
+            <p>Desde aquí podrás gestionar las funciones administrativas cuando estén disponibles.</p>
+        </p:panel>
+    </ui:define>
+</ui:composition>

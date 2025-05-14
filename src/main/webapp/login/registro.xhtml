@@ -11,26 +11,38 @@
         </h:form>
         <h:panelGroup id="formularios" layout="block" styleClass="ui-g">
             <!--  Formulario Cliente  -->
-            <h:form id="formCliente">
+            <h:form id="formCliente" rendered="#{registerView.tipoUsuario eq 'cliente'}" styleClass="ui-g-6">
                 <h:inputHidden value="#{registerView.tipoUsuario}"/>
-                styleClass="ui-g-6" rendered="#{registerView.tipoUsuario eq 'cliente'}">
                 <p:panel header="Formulario Cliente">
                     <p:panelGrid columns="2">
                         <h:outputLabel for="emailC" value="Email:"/>
                         <p:inputText id="emailC" value="#{registerView.email}" required="true"/>
+
                         <h:outputLabel for="passwordC" value="Contraseña:"/>
                         <p:password id="passwordC" value="#{registerView.password}" required="true"/>
+
                         <h:outputLabel for="confirmPasswordC" value="Confirmar contraseña:"/>
                         <p:password id="confirmPasswordC" value="#{registerView.confirmPassword}" required="true"/>
+
                         <h:outputLabel for="nombreC" value="Nombre:"/>
                         <p:inputText id="nombreC" value="#{registerView.nombre}" required="true"/>
+
                         <h:outputLabel for="apellidos" value="Apellidos:"/>
                         <p:inputText id="apellidos" value="#{registerView.apellidos}" required="true"/>
+
                         <h:outputLabel for="nif" value="NIF:"/>
                         <p:inputText id="nif" value="#{registerView.nif}" required="true"/>
+
                         <h:outputLabel for="fechaNacimiento" value="Fecha de nacimiento:"/>
                         <p:calendar id="fechaNacimiento" value="#{registerView.fechaNacimiento}" pattern="dd/MM/yyyy"/>
+
+                        <h:outputLabel for="domicilioC" value="Domicilio:"/>
+                        <p:inputText id="domicilioC" value="#{registerView.domicilio}" required="true"/>
+
+                        <h:outputLabel for="telefonoC" value="Teléfono:"/>
+                        <p:inputText id="telefonoC" value="#{registerView.telefono}" required="true"/>
                     </p:panelGrid>
+
                     <p:commandButton value="Registrar Cliente" action="#{registerView.registrar}"/>
                 </p:panel>
             </h:form>
