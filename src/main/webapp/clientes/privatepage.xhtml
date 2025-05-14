@@ -1,10 +1,24 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
 
-    <body>
-        <p>Esta es una página privada, requiere acceso mediante 
-            password.</p>
-    </body>
-</html>
+    <ui:define name="contenido">
+        <h2>Bienvenido a tu área privada</h2>
+        <p>Esta es una página privada. Solo los usuarios autenticados pueden verla.</p>
+
+        <p:panel header="Información del usuario" style="margin-top: 20px;">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputText value="Correo:" />
+                <h:outputText value="#{loginView.authenticatedUser.email}" />
+
+                <h:outputText value="Nombre:" />
+                <h:outputText value="#{loginView.authenticatedUser.nombre}" />
+            </h:panelGrid>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

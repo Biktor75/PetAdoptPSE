@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?> 
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -6,87 +6,79 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="${facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
-        <link href="${facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
-        <link href="${facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
-        <link href="${facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
-        <title>Pet Adopt</title>
-    </h:head>
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Pet Adopt</title>
+    <link href="#{facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" />
+    <link href="#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" />
+</h:head>
 
-    <h:body>
-        <p:layout fullPage="true">
+<h:body>
+    <p:layout fullPage="true">
 
-            <!-- CABECERA -->
-            <p:layoutUnit position="north" size="80" resizable="true" closable="true" collapsible="true">
-                <h:form style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+        <!-- CABECERA -->
+        <p:layoutUnit position="north" size="80" resizable="false" closable="false" collapsible="false">
+            <h:form style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
 
-                <!-- Título o botón Inicio -->
+                <!-- Título -->
                 <h:link outcome="/index.xhtml" style="font-size: 1.5em; font-weight: bold; text-decoration: none;">
-                    Cines Luz de Castilla - Segovia
+                    Pet Adopt - Adopta con confianza
                 </h:link>
 
-                <!-- Botones de sesión -->
-                <h:panelGroup layout="block" style="display: flex; align-items: center">
-                    <!-- Botones para usuarios no autenticados -->
-                    <!--<p:commandButton value="Iniciar sesión" outcome="/login.xhtml"
-                                     rendered="#{!request.isUserInRole('users')}" icon="pi pi-sign-in" />
-                    <p:commandButton value="Registro" outcome="/registro.xhtml"
-                                     rendered="#{!request.isUserInRole('users')}" icon="pi pi-user-plus" />
-                    -->
-
-                    <p:menuButton value="Sesión"
-                                  rendered="#{!request.isUserInRole('users')}" icon="pi pi-user">
-                        <p:menuitem value="Iniciar sesión" outcome="/login/login.xhtml" icon="pi pi-power-off"/>
-                        <p:menuitem value="Registro" outcome="/login/registro.xhtml" icon="pi pi-power-off"/>
+                <!-- Área de sesión -->
+                <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 10px;">
+                    <!-- Si NO está autenticado -->
+                    <p:menuButton value="Sesión" icon="pi pi-user"
+                                  rendered="#{loginView.authenticatedUser == null}">
+                        <p:menuitem value="Iniciar sesión" outcome="/login/login.xhtml" icon="pi pi-sign-in" />
+                        <p:menuitem value="Registro" outcome="/login/registro.xhtml" icon="pi pi-user-plus" />
                     </p:menuButton>
-                    
-                    <!-- Menú para usuarios autenticados -->
-                    <p:menuButton value="#{loginView.authenticatedUser.name}"
-                                  rendered="#{request.isUserInRole('users')}" icon="pi pi-user">
-                        <p:menuitem value="Cerrar sesión" action="#{loginView.logout}" icon="pi pi-power-off"/>
+
+                    <!-- Si está autenticado -->
+                    <p:menuButton value="#{loginView.authenticatedUser.nombre}" icon="pi pi-user"
+                                  rendered="#{loginView.authenticatedUser != null}">
+                        <p:menuitem value="Cerrar sesión" action="#{loginView.logout}" icon="pi pi-power-off" />
                     </p:menuButton>
                 </h:panelGroup>
 
             </h:form>
+        </p:layoutUnit>
 
-            </p:layoutUnit>
+        <!-- MENÚ LATERAL -->
+        <p:layoutUnit position="west" size="200" header="Menú" collapsible="true">
+            <h:form>
+                <p:menu>
+                    <p:menuitem value="Inicio" outcome="/index.xhtml" icon="pi pi-home" />
 
-            <!-- MENÚ LATERAL -->
-            <p:layoutUnit position="west" size="200" header="Menú" collapsible="true">
-                <h:form>
-                    <p:menu>
-                        <p:menuitem value="Inicio" outcome="/index.xhtml" icon="pi pi-home" />
+                    <p:submenu label="Zona privada" rendered="#{request.isUserInRole('cliente') or request.isUserInRole('refugio')}">
+                        <p:menuitem value="Área Cliente" outcome="/clientes/privatepage.xhtml"
+                                    rendered="#{request.isUserInRole('cliente')}" icon="pi pi-user-edit" />
+                        <p:menuitem value="Área Refugio" outcome="/refugios/privatepage.xhtml"
+                                    rendered="#{request.isUserInRole('refugio')}" icon="pi pi-home" />
+                    </p:submenu>
 
-                        <p:submenu label="Usuario" rendered="#{request.isUserInRole('users')}">
-                            <p:menuitem value="Booking" outcome="/booking.xhtml" icon="pi pi-ticket"/>
-                            <p:menuitem value="Chat" outcome="/chat/chatroom.xhtml" icon="pi pi-comments"/>
-                        </p:submenu>
+                    <p:submenu label="Administrador" rendered="#{request.isUserInRole('admin')}">
+                        <p:menuitem value="Gestión de usuarios" outcome="/admin/users.xhtml" icon="pi pi-users" />
+                        <p:menuitem value="Gestión de mascotas" outcome="/admin/pets.xhtml" icon="pi pi-database" />
+                    </p:submenu>
+                </p:menu>
+            </h:form>
+        </p:layoutUnit>
 
-                        <p:submenu label="Administrador" rendered="#{request.isUserInRole('admin')}">
-                            <p:menuitem value="Películas" outcome="/client/movies.xhtml" icon="pi pi-video"/>
-                            <p:menuitem value="Usuarios" outcome="/admin/users.xhtml" icon="pi pi-users"/>
-                        </p:submenu>
-                    </p:menu>
-                </h:form>
-            </p:layoutUnit>
+        <!-- CONTENIDO PRINCIPAL -->
+        <p:layoutUnit position="center">
+            <ui:insert name="contenido">Contenido principal</ui:insert>
+        </p:layoutUnit>
 
-            <!-- CONTENIDO PRINCIPAL -->
-            <p:layoutUnit position="center">
-                <ui:insert name="contenido">Contenido principal</ui:insert>
-            </p:layoutUnit>
+        <!-- PIE DE PÁGINA -->
+        <p:layoutUnit position="south" size="50" resizable="false" closable="false" collapsible="false">
+            <ui:insert name="bottom">
+                <div style="text-align: right; padding: 10px;">
+                    © 2025 Pet Adopt · Teléfono: 123 456 789 · Email: contacto@petadopt.es
+                </div>
+            </ui:insert>
+        </p:layoutUnit>
 
-            <!-- PIE DE PÁGINA -->
-            <p:layoutUnit position="south" size="50" resizable="true" closable="true" collapsible="true">
-                <ui:insert name="bottom">
-                    <div style="text-align: right; padding: 10px;">
-                        © 2025 Pet Adopt · Teléfono: 123 456 789 · Email: contacto@petadopt.es
-                    </div>
-                </ui:insert>
-            </p:layoutUnit>
-
-        </p:layout>
-    </h:body>
-
+    </p:layout>
+</h:body>
 </html>
