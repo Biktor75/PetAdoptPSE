@@ -90,7 +90,7 @@ public class RegisterView implements Serializable {
             userEJB.persistRefugio(refugio);
         }
 
-        return "login/login?faces-redirect=true";
+        return "login?faces-redirect=true";
     }
 
     private boolean esMayorEdad(Date fechaNacimiento) {
