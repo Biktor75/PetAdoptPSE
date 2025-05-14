@@ -18,7 +18,7 @@ import java.util.Date;
 @RequestScoped
 public class RegisterView implements Serializable {
 
-    private String tipoUsuario = "cliente"; // ⚠️ Por defecto cliente
+    private String tipoUsuario; // ⚠️ Sin valor por defecto
 
     // Comunes
     private String email;
@@ -61,7 +61,7 @@ public class RegisterView implements Serializable {
         // Crear usuario base
         Users user = new Users();
         user.setEmail(email);
-        user.setNombre(nombre);
+        user.setNombre(nombre); // Para ambos tipos, aunque Refugio puede dejarlo nulo
         user.setPassword(password);
 
         Users creado = userEJB.createUser(user, tipoUsuario);
@@ -71,19 +71,16 @@ public class RegisterView implements Serializable {
         }
 
         if ("cliente".equals(tipoUsuario)) {
-            // Registro para cliente
             Clientes cliente = new Clientes();
             cliente.setEmail(email);
             cliente.setNif(nif);
             cliente.setDomicilio(domicilio);
             cliente.setTelefono(telefono);
             cliente.setFechaNacimiento(fechaNacimiento);
-            cliente.setApellidos(apellidos); 
+            cliente.setApellidos(apellidos);
             userEJB.persistCliente(cliente);
-            System.out.println("✅ Cliente persistido");
 
         } else if ("refugio".equals(tipoUsuario)) {
-            // Registro para refugio
             Refugios refugio = new Refugios();
             refugio.setEmail(email);
             refugio.setCif(cif);
@@ -91,7 +88,6 @@ public class RegisterView implements Serializable {
             refugio.setTelefono(telefono);
             refugio.setAutorizado(false);
             userEJB.persistRefugio(refugio);
-            System.out.println("✅ Refugio persistido");
         }
 
         return "login/login?faces-redirect=true";
@@ -107,7 +103,7 @@ public class RegisterView implements Serializable {
         return Date.from(LocalDate.now().minusYears(18).atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
-    // Getters y Setters
+    // Getters y setters
 
     public String getTipoUsuario() { return tipoUsuario; }
     public void setTipoUsuario(String tipoUsuario) { this.tipoUsuario = tipoUsuario; }
