@@ -133,7 +133,8 @@ public class Refugios implements Serializable {
     }
 
     public void setUsers(Users user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // Igual que antes: si no hay relación directa con `Users`, puedes eliminar este método.
     }
+
     
 }

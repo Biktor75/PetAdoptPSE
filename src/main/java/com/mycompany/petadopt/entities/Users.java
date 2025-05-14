@@ -111,5 +111,9 @@ public class Users implements Serializable {
     public String toString() {
         return "com.mycompany.petadopt.entities.Users[ email=" + email + " ]";
     }
+
+    public void setName(String nombre) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

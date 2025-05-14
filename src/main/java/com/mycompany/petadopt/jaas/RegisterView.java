@@ -1,66 +1,116 @@
 package com.mycompany.petadopt.jaas;
 
-import com.mycompany.petadopt.jaas.UserEJB;
+import com.mycompany.petadopt.entities.Clientes;
+import com.mycompany.petadopt.entities.Refugios;
 import com.mycompany.petadopt.entities.Users;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ComponentSystemEvent;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Named
 @RequestScoped
-public class RegisterView {
+public class RegisterView implements Serializable {
 
-    private String name;
+    private String tipoUsuario = "cliente"; // ⚠️ Por defecto cliente
+
+    // Comunes
     private String email;
     private String password;
     private String confirmPassword;
-    private String role = "cliente"; // cliente o refugio
+    private String domicilio;
+    private String telefono;
+
+    // Cliente
+    private String nombre;
+    private String apellidos;
+    private String nif;
+    private Date fechaNacimiento;
+
+    // Refugio
+    private String cif;
 
     @Inject
     private UserEJB userEJB;
 
-    public void validatePassword(ComponentSystemEvent event) {
-    FacesContext context = FacesContext.getCurrentInstance();
+    public String registrar() {
+        System.out.println("🚀 MÉTODO REGISTRAR EJECUTADO");
+        System.out.println("📌 tipoUsuario: " + tipoUsuario);
+        System.out.println("📅 fechaNacimiento: " + fechaNacimiento);
 
-    if (password == null || confirmPassword == null) {
-        return;
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (!password.equals(confirmPassword)) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Las contraseñas no coinciden", null));
+            return null;
+        }
+
+        if ("cliente".equals(tipoUsuario)) {
+            if (!esMayorEdad(fechaNacimiento)) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debes ser mayor de edad para registrarte", null));
+                return null;
+            }
+        }
+
+        // Crear usuario base
+        Users user = new Users();
+        user.setEmail(email);
+        user.setNombre(nombre);
+        user.setPassword(password);
+
+        Users creado = userEJB.createUser(user, tipoUsuario);
+        if (creado == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear usuario", null));
+            return null;
+        }
+
+        if ("cliente".equals(tipoUsuario)) {
+            // Registro para cliente
+            Clientes cliente = new Clientes();
+            cliente.setEmail(email);
+            cliente.setNif(nif);
+            cliente.setDomicilio(domicilio);
+            cliente.setTelefono(telefono);
+            cliente.setFechaNacimiento(fechaNacimiento);
+            cliente.setApellidos(apellidos); 
+            userEJB.persistCliente(cliente);
+            System.out.println("✅ Cliente persistido");
+
+        } else if ("refugio".equals(tipoUsuario)) {
+            // Registro para refugio
+            Refugios refugio = new Refugios();
+            refugio.setEmail(email);
+            refugio.setCif(cif);
+            refugio.setDomicilio(domicilio);
+            refugio.setTelefono(telefono);
+            refugio.setAutorizado(false);
+            userEJB.persistRefugio(refugio);
+            System.out.println("✅ Refugio persistido");
+        }
+
+        return "login/login?faces-redirect=true";
     }
 
-    if (!password.equals(confirmPassword)) {
-        FacesMessage msg = new FacesMessage("Las contraseñas no coinciden");
-        context.addMessage(null, msg);
-        context.renderResponse();
-        return;
+    private boolean esMayorEdad(Date fechaNacimiento) {
+        if (fechaNacimiento == null) return false;
+        LocalDate fechaNac = fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return fechaNac.isBefore(LocalDate.now().minusYears(18));
     }
 
-    if (email != null && userEJB.findByEmail(email) != null) {
-        FacesMessage msg = new FacesMessage("Ya existe un usuario con ese email");
-        context.addMessage(null, msg);
-        context.renderResponse();
-    }
-}
-
-
-    private String getValueFromComponent(UIComponent parent, String id) {
-        UIInput input = (UIInput) parent.findComponent(id);
-        return input.getLocalValue() != null ? input.getLocalValue().toString() : "";
-    }
-
-    public String register() {
-        Users user = new Users(email, password, name);
-        userEJB.createUser(user, role);
-        return "login?faces-redirect=true";
+    public Date getFechaMaxima() {
+        return Date.from(LocalDate.now().minusYears(18).atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     // Getters y Setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+
+    public String getTipoUsuario() { return tipoUsuario; }
+    public void setTipoUsuario(String tipoUsuario) { this.tipoUsuario = tipoUsuario; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
@@ -71,6 +121,24 @@ public class RegisterView {
     public String getConfirmPassword() { return confirmPassword; }
     public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getDomicilio() { return domicilio; }
+    public void setDomicilio(String domicilio) { this.domicilio = domicilio; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public String getApellidos() { return apellidos; }
+    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
+
+    public String getNif() { return nif; }
+    public void setNif(String nif) { this.nif = nif; }
+
+    public Date getFechaNacimiento() { return fechaNacimiento; }
+    public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+
+    public String getCif() { return cif; }
+    public void setCif(String cif) { this.cif = cif; }
 }

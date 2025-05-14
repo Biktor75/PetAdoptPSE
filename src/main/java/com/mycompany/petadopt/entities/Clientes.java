@@ -59,6 +59,17 @@ public class Clientes implements Serializable {
     @Column(name = "fecha_nacimiento")
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
+    @Column(name = "apellidos")
+    private String apellidos;
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
 
     public Clientes() {
     }
@@ -137,16 +148,14 @@ public class Clientes implements Serializable {
         return "com.mycompany.petadopt.entities.Clientes[ email=" + email + " ]";
     }
 
-    public void setUsers(Users user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setApellidos(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.fechaNacimiento = java.sql.Date.valueOf(fechaNacimiento);
     }
+
+    public void setUsers(Users user) {
+        // Si no tienes relación directa con la tabla `users`, este método se puede eliminar.
+    }
+
+    
     
 }
