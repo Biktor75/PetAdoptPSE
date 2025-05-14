@@ -5,6 +5,7 @@ import com.mycompany.petadopt.entities.UserGroups;
 import com.mycompany.petadopt.entities.UserGroupsPK;
 import com.mycompany.petadopt.entities.Clientes;
 import com.mycompany.petadopt.entities.Refugios;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -112,6 +113,11 @@ public class UserEJB {
         return null;
     }
 }
+    public List<Refugios> findRefugiosNoAutorizados() {
+    return em.createQuery("SELECT r FROM Refugios r WHERE r.autorizado = false", Refugios.class)
+             .getResultList();
+}
+
 
 
 
