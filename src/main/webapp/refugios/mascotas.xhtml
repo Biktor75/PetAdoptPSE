@@ -2,20 +2,92 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="contenido">
-        <h2>Mascotas de tu refugio</h2>
+        <h2>Mis mascotas</h2>
 
-        <h:link outcome="nuevaMascota.xhtml" value="➕ Añadir nueva mascota" />
+        <h:form id="formMascotas">
+            <p:commandButton value="Añadir nueva mascota" icon="pi pi-plus"
+                             action="/refugios/nuevaMascota.xhtml?faces-redirect=true"
+                             ajax="false"
+                             style="margin-bottom: 15px;" />
 
-        <p:dataTable value="#{mascotaView.mascotas}" var="m">
-            <p:column headerText="Nombre"><h:outputText value="#{m.nombre}" /></p:column>
-            <p:column headerText="Especie"><h:outputText value="#{m.especie}" /></p:column>
-            <p:column headerText="Raza"><h:outputText value="#{m.raza}" /></p:column>
-            <p:column headerText="Edad"><h:outputText value="#{m.edad}" /></p:column>
-            <p:column headerText="Estado Salud"><h:outputText value="#{m.estadoSalud}" /></p:column>
-            <p:column headerText="Coste"><h:outputText value="#{m.costeAdopcion} €" /></p:column>
-        </p:dataTable>
+
+            <p:dataTable value="#{mascotaView.mascotas}" var="m" id="tablaMascotas"
+                         emptyMessage="No hay mascotas registradas."
+                         paginator="true" rows="10">
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{m.nombre}" />
+                </p:column>
+
+                <p:column headerText="Especie">
+                    <h:outputText value="#{m.especie}" />
+                </p:column>
+
+                <p:column headerText="Raza">
+                    <h:outputText value="#{m.raza}" />
+                </p:column>
+
+                <p:column headerText="Edad">
+                    <h:outputText value="#{m.edad}" />
+                </p:column>
+
+                <p:column headerText="Estado de Salud">
+                    <h:outputText value="#{m.estadoSalud}" />
+                </p:column>
+
+                <p:column headerText="Coste de Adopción">
+                    <h:outputText value="#{m.costeAdopcion} €" />
+                </p:column>
+
+                <p:column headerText="Acciones" style="width:130px">
+                    <p:commandButton icon="pi pi-pencil" title="Editar"
+                                     action="#{mascotaView.cargarParaEditar(m)}"
+                                     update=":formEditarMascota" oncomplete="PF('dlgEditar').show()" />
+
+                    <p:commandButton icon="pi pi-trash" title="Eliminar"
+                                     action="#{mascotaView.eliminarMascota(m)}"
+                                     update="formMascotas"
+                                     styleClass="ui-button-danger" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+        <!-- Diálogo para editar mascota -->
+        <h:form id="formEditarMascota">
+            <p:dialog header="Editar Mascota" widgetVar="dlgEditar" modal="true"
+                      closable="true" resizable="false" appendTo="@(body)">
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <h:outputLabel value="Nombre:" />
+                    <p:inputText value="#{mascotaView.mascotaSeleccionada.nombre}" />
+
+                    <h:outputLabel value="Especie:" />
+                    <p:inputText value="#{mascotaView.mascotaSeleccionada.especie}" />
+
+                    <h:outputLabel value="Raza:" />
+                    <p:inputText value="#{mascotaView.mascotaSeleccionada.raza}" />
+
+                    <h:outputLabel value="Edad:" />
+                    <p:spinner value="#{mascotaView.mascotaSeleccionada.edad}" min="0" />
+
+                    <h:outputLabel value="Estado de Salud:" />
+                    <p:inputText value="#{mascotaView.mascotaSeleccionada.estadoSalud}" />
+
+                    <h:outputLabel value="Coste de Adopción:" />
+                    <p:inputText value="#{mascotaView.mascotaSeleccionada.costeAdopcion}" />
+                </h:panelGrid>
+
+                <p:commandButton value="Guardar" icon="pi pi-check"
+                                 action="#{mascotaView.guardarEdicion()}"
+                                 oncomplete="PF('dlgEditar').hide()"
+                                 update=":formMascotas" />
+            </p:dialog>
+        </h:form>
     </ui:define>
 </ui:composition>
