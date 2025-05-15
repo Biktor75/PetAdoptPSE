@@ -29,28 +29,36 @@ public class MascotaView implements Serializable {
     private final Client client = ClientBuilder.newClient();
 
     @PostConstruct
-public void init() {
-    try {
-        if (loginView.getAuthenticatedUser() != null) {
-            String email = loginView.getAuthenticatedUser().getEmail();
-            mascotas = restClient.findByRefugioEmail(email);
-        } else {
-            System.err.println("⚠️ Usuario no autenticado en MascotaView");
+    public void init() {
+        try {
+            if (loginView.getAuthenticatedUser() != null) {
+                cargarMascotas(); // ✅ CORRECTO
+            } else {
+                System.err.println("⚠️ Usuario no autenticado en MascotaView");
+            }
+        } catch (Exception e) {
+            System.err.println("❌ ERROR en init() de MascotaView:");
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        System.err.println("❌ ERROR en init() de MascotaView:");
-        e.printStackTrace();
     }
-}
-
 
     public void cargarMascotas() {
-        String refugioEmail = loginView.getAuthenticatedUser().getEmail();
-        mascotas = client
-            .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
-            .path("refugio/" + refugioEmail)
-            .request(MediaType.APPLICATION_JSON)
-            .get(new GenericType<List<Mascotas>>() {});
+        try {
+            String refugioEmail = loginView.getAuthenticatedUser().getEmail();
+            System.out.println("🔍 Cargando mascotas del refugio: " + refugioEmail);
+
+            mascotas = client
+                    .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
+                    .path("refugio/" + refugioEmail)
+                    .request(MediaType.APPLICATION_JSON)
+                    .get(new GenericType<List<Mascotas>>() {
+                    });
+
+            System.out.println("✅ Mascotas cargadas: " + mascotas.size());
+        } catch (Exception e) {
+            System.err.println("❌ Error al cargar mascotas:");
+            e.printStackTrace();
+        }
     }
 
     public String guardarNuevaMascota() {
