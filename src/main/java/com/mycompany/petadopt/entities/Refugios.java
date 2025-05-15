@@ -55,6 +55,7 @@ public class Refugios implements Serializable {
     @Column(name = "autorizado")
     private Boolean autorizado;
 
+
     public Refugios() {
     }
 

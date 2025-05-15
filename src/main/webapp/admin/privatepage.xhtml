@@ -5,6 +5,11 @@
                 xmlns:p="http://primefaces.org/ui">
     
     <ui:define name="contenido">
+        <p:panel header="DEBUG ROLES">
+    <p>Usuario: #{loginView.authenticatedUser.email}</p>
+    <p>isUserInRole('admin'): #{request.isUserInRole('admin')}</p>
+</p:panel>
+
         <h2>Zona privada del administrador</h2>
         <p>Bienvenido, <strong>#{loginView.authenticatedUser.nombre}</strong>.</p>
 

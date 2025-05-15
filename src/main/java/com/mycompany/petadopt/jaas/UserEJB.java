@@ -117,6 +117,23 @@ public class UserEJB {
     return em.createQuery("SELECT r FROM Refugios r WHERE r.autorizado = false", Refugios.class)
              .getResultList();
 }
+    
+    public void autorizarRefugio(String email) {
+    try {
+        Refugios refugio = em.find(Refugios.class, email);
+        if (refugio != null && Boolean.FALSE.equals(refugio.getAutorizado())) {
+            refugio.setAutorizado(true);
+            em.merge(refugio); // ⬅️ Esto guarda el cambio
+            System.out.println("✅ Refugio autorizado en DB: " + email);
+        } else {
+            System.out.println("⚠️ Refugio ya autorizado o no encontrado: " + email);
+        }
+    } catch (Exception e) {
+        System.out.println("❌ ERROR al autorizar refugio:");
+        e.printStackTrace();
+    }
+}
+
 
 
 

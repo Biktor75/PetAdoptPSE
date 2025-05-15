@@ -56,7 +56,11 @@
                             rendered="#{request.isUserInRole('cliente')}" icon="pi pi-user-edit" />
                 <p:menuitem value="Área Refugio" outcome="/refugios/privatepage.xhtml"
                             rendered="#{request.isUserInRole('refugio')}" icon="pi pi-home" />
+                
+
             </p:submenu>
+            <p:menuitem value="Gestión de refugios" outcome="/admin/gestrefugios.xhtml" icon="pi pi-briefcase"
+            rendered="#{request.isUserInRole('admin')}" />
         </p:menu>
     </h:form>
 </p:layoutUnit>
