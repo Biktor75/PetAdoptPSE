@@ -47,23 +47,24 @@
             <!-- MENÚ LATERAL -->
             <!-- MENÚ LATERAL -->
             <p:layoutUnit position="west" size="200" header="Menú" collapsible="true">
-    <h:form>
-        <p:menu>
-            <p:menuitem value="Inicio" outcome="/index.xhtml" icon="pi pi-home" />
+                <h:form>
+                    <p:menu>
+                        <p:menuitem value="Inicio" outcome="/index.xhtml" icon="pi pi-home" />
 
-            <p:submenu label="Zona privada" rendered="#{request.isUserInRole('cliente') or request.isUserInRole('refugio')}">
-                <p:menuitem value="Área Cliente" outcome="/clientes/privatepage.xhtml"
-                            rendered="#{request.isUserInRole('cliente')}" icon="pi pi-user-edit" />
-                <p:menuitem value="Área Refugio" outcome="/refugios/privatepage.xhtml"
-                            rendered="#{request.isUserInRole('refugio')}" icon="pi pi-home" />
-                
+                        <p:submenu label="Zona privada" rendered="#{request.isUserInRole('cliente') or request.isUserInRole('refugio')}">
+                            <p:menuitem value="Área Cliente" outcome="/clientes/privatepage.xhtml"
+                                        rendered="#{request.isUserInRole('cliente')}" icon="pi pi-user-edit" />
+                            <p:menuitem value="Área Refugio" outcome="/refugios/privatepage.xhtml"
+                                        rendered="#{request.isUserInRole('refugio')}" icon="pi pi-home" />
+                            <p:menuitem value="Mis Mascotas" outcome="/refugios/mascotas.xhtml"
+                                        rendered="#{request.isUserInRole('refugio')}" icon="pi pi-paw" />
+                        </p:submenu>
 
-            </p:submenu>
-            <p:menuitem value="Gestión de refugios" outcome="/admin/gestrefugios.xhtml" icon="pi pi-briefcase"
-            rendered="#{request.isUserInRole('admin')}" />
-        </p:menu>
-    </h:form>
-</p:layoutUnit>
+                        <p:menuitem value="Gestión de refugios" outcome="/admin/gestrefugios.xhtml" icon="pi pi-briefcase"
+                                    rendered="#{request.isUserInRole('admin')}" />
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
 
 
 

@@ -87,5 +87,15 @@ public class MascotasFacadeREST extends AbstractFacade<Mascotas> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
+    @GET
+    @Path("refugio/{email}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Mascotas> findByRefugio(@PathParam("email") String email) {
+        return em.createNamedQuery("Mascotas.findByRefugioEmail", Mascotas.class)
+                .setParameter("refugioEmail", email)
+                .getResultList();
+    }
+
+
 }

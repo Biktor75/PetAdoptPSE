@@ -1,0 +1,21 @@
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="contenido">
+        <h2>Mascotas de tu refugio</h2>
+
+        <h:link outcome="nuevaMascota.xhtml" value="➕ Añadir nueva mascota" />
+
+        <p:dataTable value="#{mascotaView.mascotas}" var="m">
+            <p:column headerText="Nombre"><h:outputText value="#{m.nombre}" /></p:column>
+            <p:column headerText="Especie"><h:outputText value="#{m.especie}" /></p:column>
+            <p:column headerText="Raza"><h:outputText value="#{m.raza}" /></p:column>
+            <p:column headerText="Edad"><h:outputText value="#{m.edad}" /></p:column>
+            <p:column headerText="Estado Salud"><h:outputText value="#{m.estadoSalud}" /></p:column>
+            <p:column headerText="Coste"><h:outputText value="#{m.costeAdopcion} €" /></p:column>
+        </p:dataTable>
+    </ui:define>
+</ui:composition>

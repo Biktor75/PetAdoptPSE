@@ -1,0 +1,36 @@
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="contenido">
+        <h2>Publicar nueva mascota</h2>
+
+        <h:form>
+            <p:panelGrid columns="2">
+
+                <h:outputLabel value="Nombre:" />
+                <p:inputText value="#{mascotaView.nuevaMascota.nombre}" required="true" />
+
+                <h:outputLabel value="Especie:" />
+                <p:inputText value="#{mascotaView.nuevaMascota.especie}" required="true" />
+
+                <h:outputLabel value="Raza:" />
+                <p:inputText value="#{mascotaView.nuevaMascota.raza}" />
+
+                <h:outputLabel value="Edad:" />
+                <p:spinner value="#{mascotaView.nuevaMascota.edad}" min="0" />
+
+                <h:outputLabel value="Estado de salud:" />
+                <p:inputText value="#{mascotaView.nuevaMascota.estadoSalud}" />
+
+                <h:outputLabel value="Coste de adopción:" />
+                <p:inputText value="#{mascotaView.nuevaMascota.costeAdopcion}" />
+
+            </p:panelGrid>
+
+            <p:commandButton value="Guardar" action="#{mascotaView.guardarNuevaMascota}" icon="pi pi-save" />
+        </h:form>
+    </ui:define>
+</ui:composition>

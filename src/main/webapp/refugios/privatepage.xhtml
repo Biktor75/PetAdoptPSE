@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition template="/WEB-INF/template.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -10,6 +8,12 @@
         <h2>Área privada del refugio</h2>
 
         <p>Bienvenido, <strong>#{loginView.authenticatedUser.nombre}</strong> 👋</p>
+
+        <!-- Mensaje de advertencia si el refugio no está autorizado -->
+        <p:panel rendered="#{not refugioView.refugio.autorizado}" 
+                 style="background-color: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 10px; margin-top: 20px;">
+            <h:outputText value="⚠️ Tu cuenta aún no ha sido autorizada por un administrador. Algunas funcionalidades pueden estar limitadas hasta entonces." />
+        </p:panel>
 
         <p:panel header="Datos del refugio" style="margin-top:20px;">
             <h:panelGrid columns="2" cellpadding="5">
