@@ -5,32 +5,35 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="contenido">
-        <h2>Publicar nueva mascota</h2>
 
         <h:form>
-            <p:panelGrid columns="2">
+            <h2>#{mascotaView.mascotaSeleccionada.id == null ? 'Nueva Mascota' : 'Editar Mascota'}</h2>
 
+            <h:panelGrid columns="2" cellpadding="5">
                 <h:outputLabel value="Nombre:" />
-                <p:inputText value="#{mascotaView.nuevaMascota.nombre}" required="true" />
+                <p:inputText value="#{mascotaView.mascotaSeleccionada.nombre}" required="true" />
 
                 <h:outputLabel value="Especie:" />
-                <p:inputText value="#{mascotaView.nuevaMascota.especie}" required="true" />
+                <p:inputText value="#{mascotaView.mascotaSeleccionada.especie}" />
 
                 <h:outputLabel value="Raza:" />
-                <p:inputText value="#{mascotaView.nuevaMascota.raza}" />
+                <p:inputText value="#{mascotaView.mascotaSeleccionada.raza}" />
 
                 <h:outputLabel value="Edad:" />
-                <p:spinner value="#{mascotaView.nuevaMascota.edad}" min="0" />
+                <p:inputText value="#{mascotaView.mascotaSeleccionada.edad}" />
 
-                <h:outputLabel value="Estado de salud:" />
-                <p:inputText value="#{mascotaView.nuevaMascota.estadoSalud}" />
+                <h:outputLabel value="Estado de Salud:" />
+                <p:inputText value="#{mascotaView.mascotaSeleccionada.estadoSalud}" />
 
-                <h:outputLabel value="Coste de adopción:" />
-                <p:inputText value="#{mascotaView.nuevaMascota.costeAdopcion}" />
+                <h:outputLabel value="Coste de Adopción:" />
+                <p:inputText value="#{mascotaView.mascotaSeleccionada.costeAdopcion}" />
+            </h:panelGrid>
 
-            </p:panelGrid>
-
-            <p:commandButton value="Guardar" action="#{mascotaView.guardarNuevaMascota}" update="@form"/>
+            <p:commandButton value="Guardar"
+                             action="#{mascotaView.guardarMascota}"
+                             icon="pi pi-save"
+                             ajax="false" />
         </h:form>
+
     </ui:define>
 </ui:composition>

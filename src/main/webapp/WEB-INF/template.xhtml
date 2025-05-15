@@ -28,16 +28,16 @@
                     <!-- Área de sesión -->
                     <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 10px;">
                         <!-- Si NO está autenticado -->
-                        <p:menuButton value="Sesión" icon="pi pi-user"
+                        <p:menuButton value="Sesión" icon="ui-icon-person"
                                       rendered="#{loginView.authenticatedUser == null}">
                             <p:menuitem value="Iniciar sesión" outcome="/login/login.xhtml" icon="pi pi-sign-in" />
                             <p:menuitem value="Registro" outcome="/login/registro.xhtml" icon="pi pi-user-plus" />
                         </p:menuButton>
 
                         <!-- Si está autenticado -->
-                        <p:menuButton value="#{loginView.authenticatedUser.nombre}" icon="pi pi-user"
+                        <p:menuButton value="#{loginView.authenticatedUser.nombre}" icon="ui-icon-person"
                                       rendered="#{loginView.authenticatedUser != null}">
-                            <p:menuitem value="Cerrar sesión" action="#{loginView.logout}" icon="pi pi-power-off" />
+                            <p:menuitem value="Cerrar sesión" action="#{loginView.logout}" icon="ui-icon-close" />
                         </p:menuButton>
                     </h:panelGroup>
 

@@ -20,8 +20,7 @@ import java.util.List;
 public class MascotaView implements Serializable {
 
     private List<Mascotas> mascotas;
-
-    private Mascotas nuevaMascota = new Mascotas();
+    private Mascotas mascotaSeleccionada = new Mascotas();
 
     @Inject
     private LoginView loginView;
@@ -32,7 +31,7 @@ public class MascotaView implements Serializable {
     public void init() {
         try {
             if (loginView.getAuthenticatedUser() != null) {
-                cargarMascotas(); // ✅ CORRECTO
+                cargarMascotas();
             } else {
                 System.err.println("⚠️ Usuario no autenticado en MascotaView");
             }
@@ -44,12 +43,12 @@ public class MascotaView implements Serializable {
 
     public void cargarMascotas() {
         try {
-            String refugioEmail = loginView.getAuthenticatedUser().getEmail();
-            System.out.println("🔍 Cargando mascotas del refugio: " + refugioEmail);
+            String email = loginView.getAuthenticatedUser().getEmail();
+            System.out.println("🔍 Cargando mascotas del refugio: " + email);
 
             mascotas = client
                     .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
-                    .path("refugio/" + refugioEmail)
+                    .path("refugio/" + email)
                     .request(MediaType.APPLICATION_JSON)
                     .get(new GenericType<List<Mascotas>>() {
                     });
@@ -61,39 +60,41 @@ public class MascotaView implements Serializable {
         }
     }
 
-    public String guardarNuevaMascota() {
-        nuevaMascota.setRefugioEmail(loginView.getAuthenticatedUser().getEmail());
-
-        client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
-              .request()
-                .post(Entity.entity(nuevaMascota, MediaType.APPLICATION_JSON));
-
-        nuevaMascota = new Mascotas(); // reset
-        cargarMascotas(); // recargar lista
-        return "/refugios/mascotas.xhtml?faces-redirect=true";
-    }
-    private Mascotas mascotaSeleccionada;
-
-    public void cargarParaEditar(Mascotas m) {
-        this.mascotaSeleccionada = m;
+    public String prepararNuevaMascota() {
+        mascotaSeleccionada = new Mascotas(); // nueva instancia vacía
+        return "/refugios/nuevaMascota.xhtml?faces-redirect=true";
     }
 
-    public void guardarEdicion() {
+    public String cargarParaEditar(Mascotas m) {
+        mascotaSeleccionada = m;
+        return "/refugios/nuevaMascota.xhtml?faces-redirect=true";
+    }
+
+    public String guardarMascota() {
         try {
-            System.out.println("✏️ Editando mascota: " + mascotaSeleccionada.getId());
-            System.out.println("🟡 Enviando PUT para ID: " + mascotaSeleccionada.getId());
+            mascotaSeleccionada.setRefugioEmail(loginView.getAuthenticatedUser().getEmail());
 
-            client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
-                    .path(String.valueOf(mascotaSeleccionada.getId()))
-                    .request()
-                    .put(Entity.entity(mascotaSeleccionada, MediaType.APPLICATION_JSON));
+            if (mascotaSeleccionada.getId() == null) {
+                // Crear
+                client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
+                        .request()
+                        .post(Entity.entity(mascotaSeleccionada, MediaType.APPLICATION_JSON));
+                System.out.println("✅ Nueva mascota creada");
+            } else {
+                // Editar
+                client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
+                        .path(String.valueOf(mascotaSeleccionada.getId()))
+                        .request()
+                        .put(Entity.entity(mascotaSeleccionada, MediaType.APPLICATION_JSON));
+                System.out.println("✅ Mascota actualizada");
+            }
 
-            cargarMascotas();  // Refrescar la lista en la tabla
-            System.out.println("✅ Mascota actualizada");
-
+            cargarMascotas();
+            return "/refugios/mascotas.xhtml?faces-redirect=true";
         } catch (Exception e) {
-            System.err.println("❌ Error al guardar edición:");
+            System.err.println("❌ Error al guardar mascota:");
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -102,8 +103,17 @@ public class MascotaView implements Serializable {
                 .path(String.valueOf(m.getId()))
                 .request()
                 .delete();
-
         cargarMascotas();
+    }
+
+    public String prepararEdicion(Mascotas m) {
+        this.mascotaSeleccionada = m;
+        return "/refugios/nuevaMascota.xhtml?faces-redirect=true";
+    }
+
+    // Getters y setters
+    public List<Mascotas> getMascotas() {
+        return mascotas;
     }
 
     public Mascotas getMascotaSeleccionada() {
@@ -113,10 +123,4 @@ public class MascotaView implements Serializable {
     public void setMascotaSeleccionada(Mascotas mascotaSeleccionada) {
         this.mascotaSeleccionada = mascotaSeleccionada;
     }
-
-
-    // Getters y setters
-    public List<Mascotas> getMascotas() { return mascotas; }
-    public Mascotas getNuevaMascota() { return nuevaMascota; }
-    public void setNuevaMascota(Mascotas nuevaMascota) { this.nuevaMascota = nuevaMascota; }
 }

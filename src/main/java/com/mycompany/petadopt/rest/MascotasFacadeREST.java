@@ -42,13 +42,21 @@ public class MascotasFacadeREST extends AbstractFacade<Mascotas> {
         super.create(entity);
     }
 
-    @PUT
+   @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, Mascotas entity) {
         System.out.println("🛠️ PUT recibida: " + entity.getId() + " - Nombre: " + entity.getNombre());
 
-        super.edit(entity);
+        Mascotas merged = getEntityManager().merge(entity);
+        getEntityManager().flush(); // Asegura que se escriba inmediatamente
+
+        // 🔍 LOG para verificar si los cambios llegaron correctamente
+        System.out.println("📌 Datos de mascota tras merge:");
+        System.out.println("Nombre: " + merged.getNombre());
+        System.out.println("Edad: " + merged.getEdad());
+        System.out.println("Salud: " + merged.getEstadoSalud());
+        System.out.println("Coste adopción: " + merged.getCosteAdopcion());
     }
 
     @DELETE
