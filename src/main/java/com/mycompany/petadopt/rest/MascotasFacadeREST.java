@@ -46,6 +46,8 @@ public class MascotasFacadeREST extends AbstractFacade<Mascotas> {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, Mascotas entity) {
+        System.out.println("🛠️ PUT recibida: " + entity.getId() + " - Nombre: " + entity.getNombre());
+
         super.edit(entity);
     }
 

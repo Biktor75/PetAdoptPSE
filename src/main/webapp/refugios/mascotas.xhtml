@@ -74,7 +74,8 @@
                     <p:inputText value="#{mascotaView.mascotaSeleccionada.raza}" />
 
                     <h:outputLabel value="Edad:" />
-                    <p:spinner value="#{mascotaView.mascotaSeleccionada.edad}" min="0" />
+                    <p:inputText value="#{mascotaView.mascotaSeleccionada.edad}" />
+
 
                     <h:outputLabel value="Estado de Salud:" />
                     <p:inputText value="#{mascotaView.mascotaSeleccionada.estadoSalud}" />
@@ -82,11 +83,11 @@
                     <h:outputLabel value="Coste de Adopción:" />
                     <p:inputText value="#{mascotaView.mascotaSeleccionada.costeAdopcion}" />
                 </h:panelGrid>
-
                 <p:commandButton value="Guardar" icon="pi pi-check"
                                  action="#{mascotaView.guardarEdicion()}"
                                  oncomplete="PF('dlgEditar').hide()"
                                  update=":formMascotas" />
+
             </p:dialog>
         </h:form>
     </ui:define>

@@ -81,6 +81,7 @@ public class MascotaView implements Serializable {
     public void guardarEdicion() {
         try {
             System.out.println("✏️ Editando mascota: " + mascotaSeleccionada.getId());
+            System.out.println("🟡 Enviando PUT para ID: " + mascotaSeleccionada.getId());
 
             client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
                     .path(String.valueOf(mascotaSeleccionada.getId()))
