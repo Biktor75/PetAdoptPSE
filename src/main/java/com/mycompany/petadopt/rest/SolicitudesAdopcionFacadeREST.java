@@ -83,9 +83,18 @@ public class SolicitudesAdopcionFacadeREST extends AbstractFacade<SolicitudesAdo
         return String.valueOf(super.count());
     }
 
+    @GET
+    @Path("cliente/{email}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<SolicitudesAdopcion> findByCliente(@PathParam("email") String email) {
+        return em.createQuery("SELECT s FROM SolicitudesAdopcion s WHERE s.clienteEmail = :email", SolicitudesAdopcion.class)
+                .setParameter("email", email)
+                .getResultList();
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

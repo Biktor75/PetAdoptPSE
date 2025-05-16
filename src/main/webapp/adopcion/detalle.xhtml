@@ -1,0 +1,21 @@
+<ui:composition template="/WEB-INF/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="contenido">
+        <h2>Detalles de la Mascota</h2>
+
+        <p:panel>
+            <p:outputLabel value="Nombre: #{adopcion.mascotaSeleccionada.nombre}" /><br/>
+            <p:outputLabel value="Raza: #{adopcion.mascotaSeleccionada.raza}" /><br/>
+            <p:outputLabel value="Edad: #{adopcion.mascotaSeleccionada.edad}" /><br/>
+            <p:outputLabel value="Salud: #{adopcion.mascotaSeleccionada.estadoSalud}" />
+        </p:panel>
+
+        <h:form>
+            <p:commandButton value="Solicitar adopción" action="confirmacion" />
+        </h:form>
+    </ui:define>
+</ui:composition>

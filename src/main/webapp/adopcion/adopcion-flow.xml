@@ -1,0 +1,19 @@
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+              http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+  <flow-definition id="adopcion">
+    <flow-view id="adopcion">/adopcion/adopcion.xhtml</flow-view>
+    <flow-view id="resultados">/adopcion/resultados.xhtml</flow-view>
+    <flow-view id="detalle">/adopcion/detalle.xhtml</flow-view>
+    <flow-view id="confirmacion">/adopcion/confirmacion.xhtml</flow-view>
+    <flow-view id="exito">/adopcion/exito.xhtml</flow-view>
+    <flow-return id="goHome">
+        <from-outcome>/index</from-outcome>
+    </flow-return>
+</flow-definition>
+
+
+</faces-config>

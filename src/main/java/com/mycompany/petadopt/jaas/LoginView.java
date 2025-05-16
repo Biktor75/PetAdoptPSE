@@ -28,11 +28,6 @@ public class LoginView implements Serializable {
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        String[] roles = {"admin", "refugio", "cliente", "users"};
-        for (String r : roles) {
-            System.out.println("¿" + r + "? " + request.isUserInRole(r));
-        }
-
         try {
             request.login(email, password);
             System.out.println("LOGIN OK - Usuario: " + email);

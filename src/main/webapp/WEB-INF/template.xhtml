@@ -49,16 +49,25 @@
             <p:layoutUnit position="west" size="200" header="Menú" collapsible="true">
                 <h:form>
                     <p:menu>
-                        <p:menuitem value="Inicio" outcome="/index.xhtml" icon="pi pi-home" />
+                        <p:menuitem value="Inicio" outcome="/index.xhtml" icon="ui-icon-home" />
 
-                        <p:submenu label="Zona privada" rendered="#{request.isUserInRole('cliente') or request.isUserInRole('refugio')}">
+                        <p:submenu label="Zona privada" rendered="#{loginView.authenticatedUser != null}">
                             <p:menuitem value="Área Cliente" outcome="/clientes/privatepage.xhtml"
-                                        rendered="#{request.isUserInRole('cliente')}" icon="pi pi-user-edit" />
+                                        rendered="#{request.isUserInRole('cliente')}" icon="ui-icon-suitcase" />
                             <p:menuitem value="Área Refugio" outcome="/refugios/privatepage.xhtml"
-                                        rendered="#{request.isUserInRole('refugio')}" icon="pi pi-home" />
+                                        rendered="#{request.isUserInRole('refugio')}" icon="ui-icon-suitcase" />
                             <p:menuitem value="Mis Mascotas" outcome="/refugios/mascotas.xhtml"
-                                        rendered="#{request.isUserInRole('refugio')}" icon="pi pi-paw" />
+                                        rendered="#{request.isUserInRole('refugio')}" icon="ui-icon-heart" />
+                            <p:menuitem value="Adoptar" action="adopcion" 
+                                        rendered="#{request.isUserInRole('cliente')}"/>
+                            <p:menuitem value="Mis Solicitudes"
+                                        outcome="/clientes/solicitudes.xhtml"
+                                        rendered="#{request.isUserInRole('cliente')}" />
+
+
                         </p:submenu>
+
+
 
                         <p:menuitem value="Gestión de refugios" outcome="/admin/gestrefugios.xhtml" icon="pi pi-briefcase"
                                     rendered="#{request.isUserInRole('admin')}" />

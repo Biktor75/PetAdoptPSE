@@ -1,0 +1,16 @@
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="contenido">
+        <h2>✅ Solicitud enviada</h2>
+
+        <p:panel header="Gracias por tu interés">
+            <p>Tu solicitud de adopción ha sido registrada con éxito.</p>
+            <p>Pronto recibirás noticias por parte del refugio correspondiente.</p>
+            <p:commandButton id="home" value="Inicio" action="goHome" icon="ui-icon-home" />
+        </p:panel>
+    </ui:define>
+</ui:composition>
