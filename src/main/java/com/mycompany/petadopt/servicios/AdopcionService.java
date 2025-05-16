@@ -72,4 +72,27 @@ public class AdopcionService {
                 .delete();
     }
 
+    public List<SolicitudesAdopcion> getSolicitudesPorRefugio(String email) {
+        return client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.solicitudesadopcion/refugio/" + email)
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<SolicitudesAdopcion>>() {
+                });
+    }
+
+    public void actualizarEstadoSolicitud(int idSolicitud, String nuevoEstado) {
+        // Paso 1: obtener la solicitud completa
+        SolicitudesAdopcion s = client
+                .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.solicitudesadopcion/" + idSolicitud)
+                .request(MediaType.APPLICATION_JSON)
+                .get(SolicitudesAdopcion.class);
+
+        // Paso 2: actualizar el campo estado
+        s.setEstado(nuevoEstado);
+
+        // Paso 3: enviar todo el objeto de vuelta con PUT
+        client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.solicitudesadopcion/" + idSolicitud)
+                .request()
+                .put(Entity.entity(s, MediaType.APPLICATION_JSON));
+    }
+
 }

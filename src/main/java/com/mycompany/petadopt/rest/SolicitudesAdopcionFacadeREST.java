@@ -1,29 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.petadopt.rest;
 
 import com.mycompany.petadopt.entities.SolicitudesAdopcion;
-import java.util.List;
+import com.mycompany.petadopt.entities.Mascotas;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
-/**
- *
- * @author victo
- */
 @Stateless
 @Path("com.mycompany.petadopt.entities.solicitudesadopcion")
 public class SolicitudesAdopcionFacadeREST extends AbstractFacade<SolicitudesAdopcion> {
@@ -46,7 +32,24 @@ public class SolicitudesAdopcionFacadeREST extends AbstractFacade<SolicitudesAdo
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, SolicitudesAdopcion entity) {
-        super.edit(entity);
+        SolicitudesAdopcion original = super.find(id);
+
+        if (original == null) {
+            throw new NotFoundException("Solicitud no encontrada");
+        }
+
+        original.setEstado(entity.getEstado());
+
+        // ✅ Si se acepta, rechazar las demás solicitudes para esa mascota
+        if ("aceptada".equalsIgnoreCase(entity.getEstado())) {
+            em.createQuery("UPDATE SolicitudesAdopcion s SET s.estado = 'rechazada' "
+                    + "WHERE s.mascotaId = :mid AND s.id <> :sid")
+                    .setParameter("mid", original.getMascotaId())
+                    .setParameter("sid", original.getId())
+                    .executeUpdate();
+        }
+
+        super.edit(original);
     }
 
     @DELETE
@@ -85,9 +88,21 @@ public class SolicitudesAdopcionFacadeREST extends AbstractFacade<SolicitudesAdo
 
     @GET
     @Path("cliente/{email}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public List<SolicitudesAdopcion> findByCliente(@PathParam("email") String email) {
         return em.createQuery("SELECT s FROM SolicitudesAdopcion s WHERE s.clienteEmail = :email", SolicitudesAdopcion.class)
+                .setParameter("email", email)
+                .getResultList();
+    }
+
+    @GET
+    @Path("refugio/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SolicitudesAdopcion> findByRefugioEmail(@PathParam("email") String email) {
+        return em.createQuery(
+                "SELECT s FROM SolicitudesAdopcion s WHERE s.mascotaId IN "
+                + "(SELECT m.id FROM Mascotas m WHERE m.refugioEmail = :email)",
+                SolicitudesAdopcion.class)
                 .setParameter("email", email)
                 .getResultList();
     }
@@ -96,5 +111,4 @@ public class SolicitudesAdopcionFacadeREST extends AbstractFacade<SolicitudesAdo
     protected EntityManager getEntityManager() {
         return em;
     }
-
 }

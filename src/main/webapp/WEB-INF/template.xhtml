@@ -59,10 +59,12 @@
                             <p:menuitem value="Mis Mascotas" outcome="/refugios/mascotas.xhtml"
                                         rendered="#{request.isUserInRole('refugio')}" icon="ui-icon-heart" />
                             <p:menuitem value="Adoptar" action="adopcion" 
-                                        rendered="#{request.isUserInRole('cliente')}"/>
+                                        rendered="#{request.isUserInRole('cliente')}" icon="ui-icon-plusthick"/>
                             <p:menuitem value="Mis Solicitudes"
                                         outcome="/clientes/solicitudes.xhtml"
-                                        rendered="#{request.isUserInRole('cliente')}" />
+                                        rendered="#{request.isUserInRole('cliente')}" icon="ui-icon-script" />
+                            <p:menuitem value="Solicitudes recibidas" outcome="/refugios/solicitudes.xhtml"
+                                        rendered="#{request.isUserInRole('refugio')}" icon="ui-icon-mail-closed" />
 
 
                         </p:submenu>

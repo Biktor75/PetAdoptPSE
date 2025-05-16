@@ -1,6 +1,7 @@
 package com.mycompany.petadopt.servicios;
 
 import com.mycompany.petadopt.entities.Mascotas;
+import com.mycompany.petadopt.entities.SolicitudesAdopcion;
 import com.mycompany.petadopt.jaas.LoginView;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,8 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Named
 @SessionScoped
@@ -46,12 +49,8 @@ public class MascotaView implements Serializable {
             String email = loginView.getAuthenticatedUser().getEmail();
             System.out.println("🔍 Cargando mascotas del refugio: " + email);
 
-            mascotas = client
-                    .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
-                    .path("refugio/" + email)
-                    .request(MediaType.APPLICATION_JSON)
-                    .get(new GenericType<List<Mascotas>>() {
-                    });
+            // Solo traer las que no han sido adoptadas
+            mascotas = getMascotasDisponibles(email);
 
             System.out.println("✅ Mascotas cargadas: " + mascotas.size());
         } catch (Exception e) {
@@ -123,4 +122,45 @@ public class MascotaView implements Serializable {
     public void setMascotaSeleccionada(Mascotas mascotaSeleccionada) {
         this.mascotaSeleccionada = mascotaSeleccionada;
     }
+
+    public List<Mascotas> getMascotasDisponibles(String refugioEmail) {
+        List<Mascotas> todas = client
+                .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas/refugio/" + refugioEmail)
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<Mascotas>>() {
+                });
+
+        List<SolicitudesAdopcion> solicitudes = client
+                .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.solicitudesadopcion/refugio/" + refugioEmail)
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<SolicitudesAdopcion>>() {
+                });
+
+        // Recoger los IDs de mascotas adoptadas
+        java.util.Set<Integer> idsAdoptadas = new java.util.HashSet<Integer>();
+        for (SolicitudesAdopcion s : solicitudes) {
+            if ("aceptada".equalsIgnoreCase(s.getEstado())) {
+                idsAdoptadas.add(s.getMascotaId());
+            }
+        }
+
+        // Filtrar solo las disponibles
+        java.util.List<Mascotas> disponibles = new java.util.ArrayList<Mascotas>();
+        for (Mascotas m : todas) {
+            if (!idsAdoptadas.contains(m.getId())) {
+                disponibles.add(m);
+            }
+        }
+
+        return disponibles;
+    }
+
+    public List<SolicitudesAdopcion> getTodasSolicitudes() {
+        return client
+                .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.solicitudesadopcion")
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<SolicitudesAdopcion>>() {
+                });
+    }
+
 }

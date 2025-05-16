@@ -24,6 +24,13 @@ public class Adopcion implements Serializable {
 
     public String buscar() {
         this.resultados = mascotasService.findByEspecie(especie);
+
+        // Obtener todas las solicitudes (desde MascotasService o usando directamente REST si lo prefieres)
+        List<SolicitudesAdopcion> solicitudes = mascotasService.getTodasSolicitudes(); // <-- necesitas este método
+
+        // Filtrar las que ya están adoptadas
+        filtrarResultadosDisponibles(solicitudes);
+
         return "resultados";
     }
 
@@ -59,4 +66,24 @@ public class Adopcion implements Serializable {
     public void setSolicitud(SolicitudesAdopcion solicitud) {
         this.solicitud = solicitud;
     }
+
+    public void filtrarResultadosDisponibles(List<SolicitudesAdopcion> solicitudes) {
+        List<Mascotas> filtradas = new java.util.ArrayList<Mascotas>();
+        java.util.Set<Integer> adoptadas = new java.util.HashSet<Integer>();
+
+        for (SolicitudesAdopcion s : solicitudes) {
+            if ("aceptada".equalsIgnoreCase(s.getEstado())) {
+                adoptadas.add(s.getMascotaId());
+            }
+        }
+
+        for (Mascotas m : resultados) {
+            if (!adoptadas.contains(m.getId())) {
+                filtradas.add(m);
+            }
+        }
+
+        this.resultados = filtradas;
+    }
+
 }
