@@ -1,5 +1,12 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" template="/WEB-INF/template.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/WEB-INF/template.xhtml">
+
     <ui:define name="contenido">
+
         <h:form id="selectorForm">
             <p:panel header="Seleccione tipo de usuario">
                 <p:selectOneButton value="#{registerView.tipoUsuario}">
@@ -9,67 +16,112 @@
                 </p:selectOneButton>
             </p:panel>
         </h:form>
+
+        <!-- Mostrar mensajes de validación -->
+        <p:messages id="msgs" showDetail="true" closable="true"/>
+
         <h:panelGroup id="formularios" layout="block" styleClass="ui-g">
-            <!--  Formulario Cliente  -->
+
+            <!-- Formulario Cliente -->
             <h:form id="formCliente" rendered="#{registerView.tipoUsuario eq 'cliente'}" styleClass="ui-g-6">
                 <h:inputHidden value="#{registerView.tipoUsuario}"/>
+
                 <p:panel header="Formulario Cliente">
                     <p:panelGrid columns="2">
+
                         <h:outputLabel for="emailC" value="Email:"/>
-                        <p:inputText id="emailC" value="#{registerView.email}" required="true"/>
+                        <p:inputText id="emailC" value="#{registerView.email}" required="true" requiredMessage="El email es obligatorio.">
+                            <f:validator validatorId="emailValidator"/>
+                            <f:ajax event="blur" render="msgs"/>
+                        </p:inputText>
 
                         <h:outputLabel for="passwordC" value="Contraseña:"/>
-                        <p:password id="passwordC" value="#{registerView.password}" required="true"/>
+                        <p:password id="passwordC" value="#{registerView.password}" required="true" requiredMessage="La contraseña es obligatoria."/>
 
                         <h:outputLabel for="confirmPasswordC" value="Confirmar contraseña:"/>
-                        <p:password id="confirmPasswordC" value="#{registerView.confirmPassword}" required="true"/>
+                        <p:password id="confirmPasswordC" value="#{registerView.confirmPassword}" required="true" requiredMessage="Debes confirmar la contraseña."/>
 
                         <h:outputLabel for="nombreC" value="Nombre:"/>
-                        <p:inputText id="nombreC" value="#{registerView.nombre}" required="true"/>
+                        <p:inputText id="nombreC" value="#{registerView.nombre}" required="true" requiredMessage="El nombre es obligatorio."/>
 
                         <h:outputLabel for="apellidos" value="Apellidos:"/>
-                        <p:inputText id="apellidos" value="#{registerView.apellidos}" required="true"/>
+                        <p:inputText id="apellidos" value="#{registerView.apellidos}" required="true" requiredMessage="Los apellidos son obligatorios."/>
 
                         <h:outputLabel for="nif" value="NIF:"/>
-                        <p:inputText id="nif" value="#{registerView.nif}" required="true"/>
+                        <p:inputText id="nif" value="#{registerView.nif}" required="true" requiredMessage="El NIF es obligatorio."
+                                     validatorMessage="El NIF debe tener 8 números y una letra.">
+                            <f:validateRegex pattern="^[0-9]{8}[A-Za-z]$"/>
+                            <f:ajax event="blur" render="msgs"/>
+                        </p:inputText>
+
 
                         <h:outputLabel for="fechaNacimiento" value="Fecha de nacimiento:"/>
-                        <p:calendar id="fechaNacimiento" value="#{registerView.fechaNacimiento}" pattern="dd/MM/yyyy"/>
+                        <p:calendar id="fechaNacimiento"
+                                    value="#{registerView.fechaNacimiento}"
+                                    pattern="dd/MM/yyyy"
+                                    required="true"
+                                    requiredMessage="La fecha de nacimiento es obligatoria."
+                                    maxdate="#{registerView.fechaMaxima}"
+                                    navigator="true"
+                                    yearRange="1900:#{registerView.fechaMaxima.year + 1900}"/>
 
                         <h:outputLabel for="domicilioC" value="Domicilio:"/>
-                        <p:inputText id="domicilioC" value="#{registerView.domicilio}" required="true"/>
+                        <p:inputText id="domicilioC" value="#{registerView.domicilio}" required="true" requiredMessage="El domicilio es obligatorio."/>
 
                         <h:outputLabel for="telefonoC" value="Teléfono:"/>
-                        <p:inputText id="telefonoC" value="#{registerView.telefono}" required="true"/>
+                        <p:inputText id="telefonoC" value="#{registerView.telefono}" required="true" requiredMessage="El teléfono es obligatorio."
+                                     validatorMessage="El teléfono debe contener 9 dígitos.">
+                            <f:validateRegex pattern="^[0-9]{9}$"/>
+                            <f:ajax event="blur" render="msgs"/>
+                        </p:inputText>
+
                     </p:panelGrid>
 
-                    <p:commandButton value="Registrar Cliente" action="#{registerView.registrar}"/>
+                    <p:commandButton value="Registrar Cliente" action="#{registerView.registrar}" update="@form msgs"/>
                 </p:panel>
             </h:form>
-            <!--  Formulario Refugio  -->
-            <h:form id="formRefugio" styleClass="ui-g-6" rendered="#{registerView.tipoUsuario eq 'refugio'}">
+
+            <!-- Formulario Refugio -->
+            <h:form id="formRefugio" rendered="#{registerView.tipoUsuario eq 'refugio'}" styleClass="ui-g-6">
                 <h:inputHidden value="#{registerView.tipoUsuario}"/>
-                
+
                 <p:panel header="Formulario Refugio">
                     <p:panelGrid columns="2">
                         <h:outputLabel for="emailR" value="Email:"/>
-                        <p:inputText id="emailR" value="#{registerView.email}" required="true"/>
+                        <p:inputText id="emailR" value="#{registerView.email}" required="true" requiredMessage="El email es obligatorio.">
+                            <f:validator validatorId="emailValidator"/>
+                            <f:ajax event="blur" render="msgs"/>
+                        </p:inputText>
+
                         <h:outputLabel for="passwordR" value="Contraseña:"/>
-                        <p:password id="passwordR" value="#{registerView.password}" required="true"/>
+                        <p:password id="passwordR" value="#{registerView.password}" required="true" requiredMessage="La contraseña es obligatoria."/>
+
                         <h:outputLabel for="confirmPasswordR" value="Confirmar contraseña:"/>
-                        <p:password id="confirmPasswordR" value="#{registerView.confirmPassword}" required="true"/>
+                        <p:password id="confirmPasswordR" value="#{registerView.confirmPassword}" required="true" requiredMessage="Debes confirmar la contraseña."/>
+
                         <h:outputLabel for="nombreR" value="Nombre del refugio:"/>
-                        <p:inputText id="nombreR" value="#{registerView.nombre}" required="true"/>
+                        <p:inputText id="nombreR" value="#{registerView.nombre}" required="true" requiredMessage="El nombre del refugio es obligatorio."/>
+
                         <h:outputLabel for="cif" value="CIF:"/>
-                        <p:inputText id="cif" value="#{registerView.cif}" required="true"/>
+                        <p:inputText id="cif" value="#{registerView.cif}" required="true" requiredMessage="El CIF es obligatorio."/>
+
                         <h:outputLabel for="domicilio" value="Domicilio:"/>
-                        <p:inputText id="domicilio" value="#{registerView.domicilio}" required="true"/>
+                        <p:inputText id="domicilio" value="#{registerView.domicilio}" required="true" requiredMessage="El domicilio es obligatorio."/>
+
                         <h:outputLabel for="telefono" value="Teléfono:"/>
-                        <p:inputText id="telefono" value="#{registerView.telefono}" required="true"/>
+                        <p:inputText id="nif" value="#{registerView.nif}" required="true" requiredMessage="El NIF es obligatorio."
+                                     validatorMessage="El NIF debe tener 8 números y una letra.">
+                            <f:validateRegex pattern="^[0-9]{8}[A-Za-z]$"/>
+                            <f:ajax event="blur" render="msgs"/>
+                        </p:inputText>
+
                     </p:panelGrid>
-                    <p:commandButton value="Registrar Refugio" action="#{registerView.registrar}"/>
+
+                    <p:commandButton value="Registrar Refugio" action="#{registerView.registrar}" update="@form msgs"/>
                 </p:panel>
             </h:form>
+
         </h:panelGroup>
+
     </ui:define>
 </ui:composition>
