@@ -17,6 +17,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 @Named
 @SessionScoped
@@ -98,11 +100,21 @@ public class MascotaView implements Serializable {
     }
 
     public void eliminarMascota(Mascotas m) {
-        client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
-                .path(String.valueOf(m.getId()))
-                .request()
-                .delete();
-        cargarMascotas();
+        try {
+            client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
+                    .path(String.valueOf(m.getId()))
+                    .request()
+                    .delete();
+
+            cargarMascotas();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Mascota eliminada", "La mascota ha sido eliminada correctamente."));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al eliminar", "No se pudo eliminar la mascota."));
+            e.printStackTrace();
+        }
     }
 
     public String prepararEdicion(Mascotas m) {

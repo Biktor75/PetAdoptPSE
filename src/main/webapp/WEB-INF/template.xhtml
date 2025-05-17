@@ -56,20 +56,20 @@
                                         rendered="#{request.isUserInRole('cliente')}" icon="ui-icon-suitcase" />
                             <p:menuitem value="Área Refugio" outcome="/refugios/privatepage.xhtml"
                                         rendered="#{request.isUserInRole('refugio')}" icon="ui-icon-suitcase" />
-                            <p:menuitem value="Mis Mascotas" outcome="/refugios/mascotas.xhtml"
-                                        rendered="#{request.isUserInRole('refugio')}" icon="ui-icon-heart" />
                             <p:menuitem value="Adoptar" action="adopcion" 
                                         rendered="#{request.isUserInRole('cliente')}" icon="ui-icon-plusthick"/>
                             <p:menuitem value="Mis Solicitudes"
                                         outcome="/clientes/solicitudes.xhtml"
                                         rendered="#{request.isUserInRole('cliente')}" icon="ui-icon-script" />
+                            <p:menuitem value="Mis Mascotas" outcome="/refugios/mascotas.xhtml"
+                                        rendered="#{loginView.refugioAutorizadoYConRol}" icon="ui-icon-heart" />
                             <p:menuitem value="Solicitudes recibidas" outcome="/refugios/solicitudes.xhtml"
-                                        rendered="#{request.isUserInRole('refugio')}" icon="ui-icon-mail-closed" />
+                                        rendered="#{loginView.refugioAutorizadoYConRol}" icon="ui-icon-mail-closed" />
+                            <p:menuitem value="Chat" outcome="/chat/chatroom.xhtml" icon="ui-icon-comment"/>
+
 
 
                         </p:submenu>
-
-
 
                         <p:menuitem value="Gestión de refugios" outcome="/admin/gestrefugios.xhtml" icon="pi pi-briefcase"
                                     rendered="#{request.isUserInRole('admin')}" />

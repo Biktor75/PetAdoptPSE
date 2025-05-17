@@ -59,5 +59,9 @@ public class SolicitudesRefugioView {
         // recargar
         init();
     }
-}
 
+    public boolean puedeAceptar(SolicitudesAdopcion solicitud) {
+        return !adopcionService.estaEnListaNegra(solicitud.getClienteEmail());
+    }
+
+}

@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -55,6 +56,42 @@ public class UsersFacadeREST extends AbstractFacade<Users> {
         super.remove(super.find(id));
     }
 
+    @DELETE
+    @Path("email/{email}")
+    public void deleteByEmail(@PathParam("email") String email) {
+        Users u = em.find(Users.class, email);
+        if (u == null) {
+            throw new NotFoundException("Usuario no encontrado");
+        }
+
+        // 1. Borrar de user_groups (si existe)
+        em.createQuery("DELETE FROM UserGroups ug WHERE ug.userGroupsPK.email = :email")
+                .setParameter("email", email)
+                .executeUpdate();
+
+        // 2. Borrar de clientes si existe
+        em.createQuery("DELETE FROM Clientes c WHERE c.email = :email")
+                .setParameter("email", email)
+                .executeUpdate();
+
+        // 3. Borrar de refugios si existe
+        em.createQuery("DELETE FROM Refugios r WHERE r.email = :email")
+                .setParameter("email", email)
+                .executeUpdate();
+
+        // 4. Borrar solicitudes y mascotas (opcional, si no lo haces ya)
+        em.createQuery("DELETE FROM SolicitudesAdopcion s WHERE s.clienteEmail = :email")
+                .setParameter("email", email)
+                .executeUpdate();
+
+        em.createQuery("DELETE FROM Mascotas m WHERE m.refugioEmail = :email")
+                .setParameter("email", email)
+                .executeUpdate();
+
+        // 5. Finalmente, eliminar de users
+        em.remove(u);
+    }
+
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -87,5 +124,5 @@ public class UsersFacadeREST extends AbstractFacade<Users> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

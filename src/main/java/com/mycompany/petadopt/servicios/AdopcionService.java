@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 
 @Named
 @RequestScoped
@@ -93,6 +94,34 @@ public class AdopcionService {
         client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.solicitudesadopcion/" + idSolicitud)
                 .request()
                 .put(Entity.entity(s, MediaType.APPLICATION_JSON));
+    }
+
+    public boolean estaEnListaNegra(String email) {
+        Client client = ClientBuilder.newClient();
+        try {
+            Response response = client
+                    .target("http://serpis.infor.uva.es:80/darklist/api/validar_adoptante/" + email)
+                    .request(MediaType.APPLICATION_JSON)
+                    .get();
+
+            if (response.getStatus() == 404) {
+                return false; // No está en la base de datos = permitido
+            }
+
+            if (response.getStatus() == 200) {
+                String resultado = response.readEntity(String.class);
+                return resultado.contains("\"listaNegra\":\"si\"");
+            }
+
+            System.out.println("❌ Error inesperado al consultar lista negra. Código: " + response.getStatus());
+            return true; // Por seguridad, en caso de error asumimos que no debe adoptar
+        } catch (Exception e) {
+            System.out.println("❌ Excepción al consultar lista negra:");
+            e.printStackTrace();
+            return true; // Por seguridad
+        } finally {
+            client.close();
+        }
     }
 
 }

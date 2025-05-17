@@ -10,12 +10,33 @@
 
         <h:form id="formMascotas">
 
-            <!-- Botón para nueva mascota -->
+            <!-- 🔔 Confirm Dialog -->
+            <p:confirmDialog id="confirmDialog"
+                             widgetVar="confirmDialog"
+                             header="Confirmación"
+                             message="¿Estás seguro de que deseas eliminar a #{mascotaView.mascotaSeleccionada.nombre}?"
+                             appendTo="@(body)"
+                             showEffect="fade" hideEffect="fade">
+
+                <p:commandButton value="Sí" icon="pi pi-check"
+                                 action="#{mascotaView.eliminarMascota(mascotaView.mascotaSeleccionada)}"
+                                 oncomplete="PF('confirmDialog').hide()"
+                                 update="formMascotas"
+                                 process="@this" />
+
+                <p:commandButton value="No" icon="pi pi-times"
+                                 onclick="PF('confirmDialog').hide()"
+                                 type="button" styleClass="ui-button-secondary" />
+            </p:confirmDialog>
+
+
+
+            <p:messages id="msgs" showDetail="true" closable="true" />
+
             <p:commandButton value="Añadir nueva mascota" icon="pi pi-plus"
                              action="#{mascotaView.prepararNuevaMascota}"
                              ajax="false"
                              style="margin-bottom: 15px;" />
-
 
             <p:dataTable value="#{mascotaView.mascotas}" var="m" id="tablaMascotas"
                          emptyMessage="No hay mascotas registradas."
@@ -46,18 +67,19 @@
                 </p:column>
 
                 <p:column headerText="Acciones" style="width:150px">
-                    <!-- Editar -->
                     <p:commandButton icon="ui-icon-pencil" title="Editar"
                                      action="#{mascotaView.prepararEdicion(m)}"
                                      ajax="false" />
 
-
-                    <!-- Eliminar -->
                     <p:commandButton icon="ui-icon-trash" title="Eliminar"
-                                     action="#{mascotaView.eliminarMascota(m)}"
-                                     update="formMascotas"
+                                     actionListener="#{mascotaView.setMascotaSeleccionada(m)}"
+                                     update="formMascotas:confirmDialog"
+                                     oncomplete="PF('confirmDialog').show()"
                                      styleClass="ui-button-danger"
                                      style="margin-left: 10px;" />
+
+
+
                 </p:column>
 
             </p:dataTable>

@@ -1,5 +1,6 @@
 package com.mycompany.petadopt.jaas;
 
+import com.mycompany.petadopt.entities.Refugios;
 import com.mycompany.petadopt.entities.Users;
 
 import javax.enterprise.context.SessionScoped;
@@ -11,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
 @Named
 @SessionScoped
@@ -64,13 +67,57 @@ public class LoginView implements Serializable {
         return "/index?faces-redirect=true";
     }
 
+    public String eliminarCuenta() {
+        try {
+            String email = user.getEmail();
+
+            Client client = ClientBuilder.newClient();
+            client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.users/email/" + email)
+                    .request()
+                    .delete();
+
+            logout(); // Cierra sesión
+            return "/index.xhtml?faces-redirect=true";
+
+        } catch (Exception e) {
+            System.err.println("❌ Error al eliminar cuenta:");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean isRefugioAutorizado() {
+        if (user == null) {
+            return false;
+        }
+        Refugios refugio = userEJB.findRefugioByEmail(user.getEmail());
+        return refugio != null && Boolean.TRUE.equals(refugio.getAutorizado());
+    }
+
+    public boolean isRefugioAutorizadoYConRol() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
+        return request.isUserInRole("refugio") && isRefugioAutorizado();
+    }
+
     public Users getAuthenticatedUser() {
         return user;
     }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

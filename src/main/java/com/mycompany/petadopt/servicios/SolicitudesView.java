@@ -59,4 +59,5 @@ public class SolicitudesView {
         listaSolicitudes = adopcionService.getSolicitudesDelCliente(); // refrescar
     }
 
+
 }

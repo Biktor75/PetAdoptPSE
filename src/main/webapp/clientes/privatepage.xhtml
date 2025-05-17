@@ -6,7 +6,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
->
+                >
 
     <ui:define name="contenido">
         <h2>Área privada del cliente</h2>
@@ -34,6 +34,42 @@
                 <h:outputText value="#{clienteView.cliente.fechaNacimiento}">
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
+<h:form id="formEliminarCuenta">
+
+    <!-- Botón que abre el diálogo -->
+    <p:commandButton value="Eliminar mi cuenta"
+                     icon="pi pi-trash"
+                     oncomplete="PF('dialogEliminarCuenta').show()"
+                     styleClass="ui-button-danger"
+                     update="confirmDialogCuenta" 
+                     process="@this"
+                     />
+
+                    <!-- Diálogo de confirmación -->
+                    <p:confirmDialog id="confirmDialogCuenta"
+                                     widgetVar="dialogEliminarCuenta"
+                                     header="Confirmación"
+                                     message="¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer."
+                                     appendTo="@(body)"
+                                     showEffect="fade" hideEffect="fade">
+
+                        <p:commandButton value="Sí, eliminar"
+                                         icon="pi pi-check"
+                                         action="#{loginView.eliminarCuenta}"
+                                         update="formEliminarCuenta"
+                                         oncomplete="PF('dialogEliminarCuenta').hide()"
+                                         styleClass="ui-button-danger"
+                                         />
+
+                        <p:commandButton value="Cancelar"
+                                         icon="pi pi-times"
+                                         onclick="PF('dialogEliminarCuenta').hide()"
+                                         type="button"
+                                         styleClass="ui-button-secondary" />
+                    </p:confirmDialog>
+
+</h:form>
+
             </h:panelGrid>
         </p:panel>
     </ui:define>

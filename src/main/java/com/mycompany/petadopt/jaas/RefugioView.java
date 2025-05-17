@@ -1,6 +1,8 @@
 package com.mycompany.petadopt.jaas;
 
 import com.mycompany.petadopt.entities.Refugios;
+import com.mycompany.petadopt.entities.SolicitudesAdopcion;
+import com.mycompany.petadopt.servicios.AdopcionService;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -44,4 +46,6 @@ public class RefugioView {
     public Refugios getRefugio() {
         return refugio;
     }
+
+    
 }

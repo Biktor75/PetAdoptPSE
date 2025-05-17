@@ -27,18 +27,22 @@
                 </p:column>
 
                 <p:column headerText="Acción">
-                    <p:commandButton value="Aceptar"
-                                     action="#{solicitudesRefugioView.actualizarEstado(s.id, 'aceptada')}"
-                                     update="@form"
-                                     rendered="#{s.estado eq 'pendiente'}"
-                                     styleClass="ui-button-success" />
-                    <p:spacer width="5"/>
-                    <p:commandButton value="Rechazar"
-                                     action="#{solicitudesRefugioView.actualizarEstado(s.id, 'rechazada')}"
-                                     update="@form"
-                                     rendered="#{s.estado eq 'pendiente'}"
-                                     styleClass="ui-button-danger" />
+                    <h:panelGroup rendered="#{s.estado eq 'pendiente'}">
+                        <p:commandButton value="Aceptar"
+                                         action="#{solicitudesRefugioView.actualizarEstado(s.id, 'aceptada')}"
+                                         update="@form"
+                                         rendered="#{solicitudesRefugioView.puedeAceptar(s)}"
+                                         styleClass="ui-button-success" />
+
+                        <p:spacer width="5"/>
+
+                        <p:commandButton value="Rechazar"
+                                         action="#{solicitudesRefugioView.actualizarEstado(s.id, 'rechazada')}"
+                                         update="@form"
+                                         styleClass="ui-button-danger" />
+                    </h:panelGroup>
                 </p:column>
+
 
             </p:dataTable>
         </h:form>
