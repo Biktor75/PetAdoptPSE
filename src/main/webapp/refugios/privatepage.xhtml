@@ -15,58 +15,82 @@
             <h:outputText value="⚠️ Tu cuenta aún no ha sido autorizada por un administrador. Algunas funcionalidades pueden estar limitadas hasta entonces." />
         </p:panel>
 
-        <p:panel header="Datos del refugio" style="margin-top:20px;">
-            <h:panelGrid columns="2" cellpadding="5">
-                <h:outputLabel value="Correo:" />
-                <h:outputText value="#{loginView.authenticatedUser.email}" />
+        <!-- 🔧 Formulario de edición -->
+        <h:form id="formRefugioDatos">
+            <p:panel header="Datos del refugio" style="margin-top:20px;">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel value="Correo:" />
+                    <h:outputText value="#{loginView.authenticatedUser.email}" />
 
-                <h:outputLabel value="CIF:" />
-                <h:outputText value="#{refugioView.refugio.cif}" />
+                    <h:outputLabel value="CIF:" />
+                    <h:outputText value="#{refugioView.refugio.cif}" />
 
-                <h:outputLabel value="Domicilio:" />
-                <h:outputText value="#{refugioView.refugio.domicilio}" />
+                    <h:outputLabel value="Domicilio:" />
+                    <h:outputText value="#{refugioView.refugio.domicilio}" />
 
-                <h:outputLabel value="Teléfono:" />
-                <h:outputText value="#{refugioView.refugio.telefono}" />
-
-                <!-- Aquí añadimos el formulario para el botón -->
-<!-- Formulario y confirmación visual con PrimeFaces -->
-<h:form id="formEliminarCuenta">
-
-    <!-- Botón que abre el diálogo -->
-    <p:commandButton value="Eliminar mi cuenta"
-                     icon="ui-icon-trash"
-                     oncomplete="PF('dialogEliminarCuenta').show()"
-                     styleClass="ui-button-danger"
-                     update="confirmDialogCuenta"
-                     process="@this" />
-
-                    <!-- Diálogo de confirmación -->
-                    <p:confirmDialog id="confirmDialogCuenta"
-                                     widgetVar="dialogEliminarCuenta"
-                                     header="Confirmación"
-                                     message="¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer."
-                                     appendTo="@(body)"
-                                     showEffect="fade" hideEffect="fade">
-
-                        <p:commandButton value="Sí, eliminar"
-                                         icon="ui-icon-alert"
-                                         action="#{loginView.eliminarCuenta}"
-                                         update="formEliminarCuenta"
-                                         oncomplete="PF('dialogEliminarCuenta').hide()"
-                                         styleClass="ui-icon-alert" />
-
-                        <p:commandButton value="Cancelar"
-                                         icon="ui-icon-arrowthickstop-1-w"
-                                         onclick="PF('dialogEliminarCuenta').hide()"
-                                         type="button"
-                                         styleClass="ui-button-secondary" />
-                    </p:confirmDialog>
-
-                </h:form>
+                    <h:outputLabel value="Teléfono:" />
+                    <h:panelGroup>
+                        <h:outputText value="#{refugioView.refugio.telefono}" rendered="#{!refugioView.editandoTelefono}" />
+                        <p:inputText value="#{refugioView.refugio.telefono}" rendered="#{refugioView.editandoTelefono}" />
 
 
-            </h:panelGrid>
-        </p:panel>
+                        <h:outputLabel />
+                        <h:panelGroup>
+                            <p:commandButton value="Modificar"
+                                             action="#{refugioView.activarEdicionTelefono}"
+                                             rendered="#{!refugioView.editandoTelefono}"
+                                             update="formRefugioDatos" />
+
+                            <p:commandButton value="Guardar"
+                                             action="#{refugioView.guardarTelefono}"
+                                             rendered="#{refugioView.editandoTelefono}"
+                                             update="formRefugioDatos"
+                                             process="@form"
+                                             icon="pi pi-check"
+                                             styleClass="ui-button-success" />
+
+                            <p:commandButton value="Cancelar"
+                                             action="#{refugioView.cancelarEdicionTelefono}"
+                                             rendered="#{refugioView.editandoTelefono}"
+                                             immediate="true"
+                                             update="formRefugioDatos"
+                                             icon="pi pi-times"
+                                             styleClass="ui-button-secondary" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <!-- ❌ Eliminar cuenta -->
+        <h:form id="formEliminarCuenta">
+            <p:commandButton value="Eliminar mi cuenta"
+                             icon="ui-icon-trash"
+                             oncomplete="PF('dialogEliminarCuenta').show()"
+                             styleClass="ui-button-danger"
+                             update="confirmDialogCuenta"
+                             process="@this" />
+
+            <p:confirmDialog id="confirmDialogCuenta"
+                             widgetVar="dialogEliminarCuenta"
+                             header="Confirmación"
+                             message="¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer."
+                             appendTo="@(body)"
+                             showEffect="fade" hideEffect="fade">
+
+                <p:commandButton value="Sí, eliminar"
+                                 icon="ui-icon-alert"
+                                 action="#{loginView.eliminarCuenta}"
+                                 update="formEliminarCuenta"
+                                 oncomplete="PF('dialogEliminarCuenta').hide()"
+                                 styleClass="ui-icon-alert" />
+
+                <p:commandButton value="Cancelar"
+                                 icon="ui-icon-arrowthickstop-1-w"
+                                 onclick="PF('dialogEliminarCuenta').hide()"
+                                 type="button"
+                                 styleClass="ui-button-secondary" />
+            </p:confirmDialog>
+        </h:form>
     </ui:define>
 </ui:composition>

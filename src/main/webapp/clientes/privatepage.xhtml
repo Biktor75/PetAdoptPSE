@@ -1,76 +1,111 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition template="/WEB-INF/template.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                >
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="contenido">
         <h2>Área privada del cliente</h2>
 
         <p>Hola, <strong>#{loginView.authenticatedUser.nombre}</strong> 👋</p>
 
-        <p:panel header="Datos del cliente" rendered="#{clienteView.cliente != null}" style="margin-top:20px;">
-            <h:panelGrid columns="2" cellpadding="5">
-                <h:outputLabel value="Correo:" />
-                <h:outputText value="#{loginView.authenticatedUser.email}" />
 
-                <h:outputLabel value="Nombre completo:" />
-                <h:outputText value="#{loginView.authenticatedUser.nombre} #{clienteView.cliente.apellidos}" />
+        <h:form id="formClienteDatos">
+            <p:panel header="Datos del cliente" rendered="#{clienteView.cliente != null}" style="margin-top:20px;">
 
-                <h:outputLabel value="NIF:" />
-                <h:outputText value="#{clienteView.cliente.nif}" />
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel value="Correo:" />
+                    <h:outputText value="#{loginView.authenticatedUser.email}" />
 
-                <h:outputLabel value="Domicilio:" />
-                <h:outputText value="#{clienteView.cliente.domicilio}" />
+                    <h:outputLabel value="Nombre completo:" />
+                    <h:outputText value="#{loginView.authenticatedUser.nombre} #{clienteView.cliente.apellidos}" />
 
-                <h:outputLabel value="Teléfono:" />
-                <h:outputText value="#{clienteView.cliente.telefono}" />
+                    <h:outputLabel value="NIF:" />
+                    <h:outputText value="#{clienteView.cliente.nif}" />
 
-                <h:outputLabel value="Fecha de nacimiento:" />
-                <h:outputText value="#{clienteView.cliente.fechaNacimiento}">
-                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                </h:outputText>
-<h:form id="formEliminarCuenta">
+                    <h:outputLabel value="Domicilio:" />
+                    <h:panelGroup layout="block">
 
-    <!-- Botón que abre el diálogo -->
-    <p:commandButton value="Eliminar mi cuenta"
-                     icon="pi pi-trash"
-                     oncomplete="PF('dialogEliminarCuenta').show()"
-                     styleClass="ui-button-danger"
-                     update="confirmDialogCuenta" 
-                     process="@this"
-                     />
 
-                    <!-- Diálogo de confirmación -->
-                    <p:confirmDialog id="confirmDialogCuenta"
-                                     widgetVar="dialogEliminarCuenta"
-                                     header="Confirmación"
-                                     message="¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer."
-                                     appendTo="@(body)"
-                                     showEffect="fade" hideEffect="fade">
+                        <h:panelGroup layout="inline" style="display: flex; align-items: center; gap: 10px;">
+                            <h:outputText value="#{clienteView.cliente.domicilio}" rendered="#{!clienteView.editandoDomicilio}" />
+                            <p:inputText value="#{clienteView.cliente.domicilio}" rendered="#{clienteView.editandoDomicilio}" />
 
-                        <p:commandButton value="Sí, eliminar"
-                                         icon="pi pi-check"
-                                         action="#{loginView.eliminarCuenta}"
-                                         update="formEliminarCuenta"
-                                         oncomplete="PF('dialogEliminarCuenta').hide()"
-                                         styleClass="ui-button-danger"
-                                         />
+                            <p:commandButton value="Modificar" action="#{clienteView.activarEdicionDomicilio}"
+                                             rendered="#{!clienteView.editandoDomicilio}" update="formClienteDatos"
+                                             styleClass="ui-button-info" />
 
-                        <p:commandButton value="Cancelar"
-                                         icon="pi pi-times"
-                                         onclick="PF('dialogEliminarCuenta').hide()"
-                                         type="button"
-                                         styleClass="ui-button-secondary" />
-                    </p:confirmDialog>
+                            <p:commandButton value="Guardar" action="#{clienteView.guardarDomicilio}"
+                                             rendered="#{clienteView.editandoDomicilio}" update="formClienteDatos"
+                                             process="@form" icon="pi pi-check" styleClass="ui-button-success" />
 
-</h:form>
+                            <p:commandButton value="Cancelar" action="#{clienteView.cancelarEdicionDomicilio}"
+                                             rendered="#{clienteView.editandoDomicilio}" immediate="true"
+                                             update="formClienteDatos" icon="pi pi-times" styleClass="ui-button-secondary" />
+                        </h:panelGroup>
+                    </h:panelGroup>
 
-            </h:panelGrid>
-        </p:panel>
+                    <h:outputLabel value="Teléfono:" />
+                    <h:panelGroup layout="block">
+
+
+                        <h:panelGroup layout="inline" style="display: flex; align-items: center; gap: 10px;">
+                            <h:outputText value="#{clienteView.cliente.telefono}" rendered="#{!clienteView.editandoTelefono}" />
+                            <p:inputText value="#{clienteView.cliente.telefono}" rendered="#{clienteView.editandoTelefono}" />
+
+                            <p:commandButton value="Modificar" action="#{clienteView.activarEdicionTelefono}"
+                                             rendered="#{!clienteView.editandoTelefono}" update="formClienteDatos"
+                                             styleClass="ui-button-info" />
+
+                            <p:commandButton value="Guardar" action="#{clienteView.guardarTelefono}"
+                                             rendered="#{clienteView.editandoTelefono}" update="formClienteDatos"
+                                             process="@form" icon="pi pi-check" styleClass="ui-button-success" />
+
+                            <p:commandButton value="Cancelar" action="#{clienteView.cancelarEdicionTelefono}"
+                                             rendered="#{clienteView.editandoTelefono}" immediate="true"
+                                             update="formClienteDatos" icon="pi pi-times" styleClass="ui-button-secondary" />
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:outputLabel value="Fecha de nacimiento:" />
+                    <h:outputText value="#{clienteView.cliente.fechaNacimiento}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+
+        <!-- Formulario eliminar cuenta -->
+        <h:form id="formEliminarCuenta">
+            <p:commandButton value="Eliminar mi cuenta"
+                             icon="pi pi-trash"
+                             oncomplete="PF('dialogEliminarCuenta').show()"
+                             styleClass="ui-button-danger"
+                             update="confirmDialogCuenta"
+                             process="@this" />
+
+            <p:confirmDialog id="confirmDialogCuenta"
+                             widgetVar="dialogEliminarCuenta"
+                             header="Confirmación"
+                             message="¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer."
+                             appendTo="@(body)"
+                             showEffect="fade" hideEffect="fade">
+
+                <p:commandButton value="Sí, eliminar"
+                                 icon="pi pi-check"
+                                 action="#{loginView.eliminarCuenta}"
+                                 update="formEliminarCuenta"
+                                 oncomplete="PF('dialogEliminarCuenta').hide()"
+                                 styleClass="ui-button-danger" />
+
+                <p:commandButton value="Cancelar"
+                                 icon="pi pi-times"
+                                 onclick="PF('dialogEliminarCuenta').hide()"
+                                 type="button"
+                                 styleClass="ui-button-secondary" />
+            </p:confirmDialog>
+        </h:form>
+
     </ui:define>
 </ui:composition>
