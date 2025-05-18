@@ -4,6 +4,7 @@ import com.mycompany.petadopt.adopcion.Adopcion;
 import com.mycompany.petadopt.entities.Mascotas;
 import com.mycompany.petadopt.entities.SolicitudesAdopcion;
 import com.mycompany.petadopt.jaas.LoginView;
+import java.io.StringReader;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -14,6 +15,9 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
@@ -97,7 +101,6 @@ public class AdopcionService {
     }
 
     public boolean estaEnListaNegra(String email) {
-        Client client = ClientBuilder.newClient();
         try {
             Response response = client
                     .target("http://serpis.infor.uva.es:80/darklist/api/validar_adoptante/" + email)
@@ -110,17 +113,20 @@ public class AdopcionService {
 
             if (response.getStatus() == 200) {
                 String resultado = response.readEntity(String.class);
-                return resultado.contains("\"listaNegra\":\"si\"");
+
+                try (JsonReader jsonReader = Json.createReader(new StringReader(resultado))) {
+                    JsonObject jsonObject = jsonReader.readObject();
+                    String estado = jsonObject.getString("listaNegra", "no");
+                    return "si".equalsIgnoreCase(estado);
+                }
             }
 
             System.out.println("❌ Error inesperado al consultar lista negra. Código: " + response.getStatus());
-            return true; // Por seguridad, en caso de error asumimos que no debe adoptar
+            return true; // Por seguridad, se deniega
         } catch (Exception e) {
             System.out.println("❌ Excepción al consultar lista negra:");
             e.printStackTrace();
-            return true; // Por seguridad
-        } finally {
-            client.close();
+            return true;
         }
     }
 
