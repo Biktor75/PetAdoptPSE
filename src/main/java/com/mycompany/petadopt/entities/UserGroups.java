@@ -13,10 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author victo
- */
+
 @Entity
 @Table(name = "user_groups")
 @XmlRootElement
@@ -58,7 +55,6 @@ public class UserGroups implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof UserGroups)) {
             return false;
         }

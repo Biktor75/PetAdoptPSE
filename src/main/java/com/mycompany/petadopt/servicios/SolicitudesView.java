@@ -11,14 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;  // ✅ CDI scope
+import javax.enterprise.context.RequestScoped; 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-/**
- *
- * @author victo
- */
+
 @Named
 @RequestScoped
 public class SolicitudesView {
@@ -32,7 +29,6 @@ public class SolicitudesView {
 
     @PostConstruct
     public void init() {
-        System.out.println("✅ Bean SolicitudesView inicializado");
         listaSolicitudes = adopcionService.getSolicitudesDelCliente();
         mascotasPorId = new HashMap<>();
 
@@ -42,7 +38,6 @@ public class SolicitudesView {
             mascotasPorId.put(id, m);
         }
 
-        System.out.println("📋 Solicitudes cargadas: " + listaSolicitudes.size());
     }
 
     public List<SolicitudesAdopcion> getListaSolicitudes() {
@@ -54,7 +49,6 @@ public class SolicitudesView {
     }
 
     public void cancelar(int idSolicitud) {
-        System.out.println("🛑 Cancelando solicitud ID: " + idSolicitud);
         adopcionService.cancelarSolicitud(idSolicitud);
         listaSolicitudes = adopcionService.getSolicitudesDelCliente(); // refrescar
     }

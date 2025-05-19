@@ -23,7 +23,6 @@ public class GestRefugios {
         try {
             refugiosPendientes = userEJB.findRefugiosNoAutorizados();
         } catch (Exception e) {
-            System.err.println("❌ ERROR EN init() de GestRefugios:");
             e.printStackTrace();
         }
     }
@@ -33,8 +32,8 @@ public class GestRefugios {
     }
 
     public void autorizar(String email) {
-        userEJB.autorizarRefugio(email); // ⬅️ Mueve la lógica al EJB
-        refugiosPendientes = userEJB.findRefugiosNoAutorizados(); // ⬅️ Refresca la lista
+        userEJB.autorizarRefugio(email); 
+        refugiosPendientes = userEJB.findRefugiosNoAutorizados(); 
     }
 
 

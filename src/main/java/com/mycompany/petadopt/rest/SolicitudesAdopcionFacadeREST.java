@@ -40,7 +40,6 @@ public class SolicitudesAdopcionFacadeREST extends AbstractFacade<SolicitudesAdo
 
         original.setEstado(entity.getEstado());
 
-        // ✅ Si se acepta, rechazar las demás solicitudes para esa mascota
         if ("aceptada".equalsIgnoreCase(entity.getEstado())) {
             em.createQuery("UPDATE SolicitudesAdopcion s SET s.estado = 'rechazada' "
                     + "WHERE s.mascotaId = :mid AND s.id <> :sid")

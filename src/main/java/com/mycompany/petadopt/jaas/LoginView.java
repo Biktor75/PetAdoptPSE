@@ -80,7 +80,6 @@ public class LoginView implements Serializable {
             return "/index.xhtml?faces-redirect=true";
 
         } catch (Exception e) {
-            System.err.println("❌ Error al eliminar cuenta:");
             e.printStackTrace();
             return null;
         }

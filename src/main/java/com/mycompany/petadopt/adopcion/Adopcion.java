@@ -25,7 +25,7 @@ public class Adopcion implements Serializable {
     public String buscar() {
         this.resultados = mascotasService.findByEspecie(especie);
 
-        // Obtener todas las solicitudes (desde MascotasService o usando directamente REST si lo prefieres)
+        // Obtener todas las solicitudes
         List<SolicitudesAdopcion> solicitudes = mascotasService.getTodasSolicitudes(); // <-- necesitas este método
 
         // Filtrar las que ya están adoptadas

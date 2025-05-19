@@ -17,10 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author victo
- */
+
 @Entity
 @Table(name = "refugios")
 @XmlRootElement
@@ -34,7 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Refugios implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Id
     @Basic(optional = false)
     @NotNull
@@ -117,7 +113,6 @@ public class Refugios implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Refugios)) {
             return false;
         }
@@ -134,7 +129,6 @@ public class Refugios implements Serializable {
     }
 
     public void setUsers(Users user) {
-        // Igual que antes: si no hay relación directa con `Users`, puedes eliminar este método.
     }
 
     

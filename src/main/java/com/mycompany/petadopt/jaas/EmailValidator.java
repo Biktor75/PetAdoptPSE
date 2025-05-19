@@ -13,10 +13,7 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-/**
- *
- * @author victo
- */
+
 @FacesValidator("emailValidator")
 public class EmailValidator implements Validator {
 

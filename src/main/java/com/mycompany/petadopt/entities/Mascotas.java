@@ -20,10 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author victo
- */
+
 @Entity
 @Table(name = "mascotas")
 @XmlRootElement
@@ -59,7 +56,6 @@ public class Mascotas implements Serializable {
     @Size(max = 255)
     @Column(name = "estado_salud")
     private String estadoSalud;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "coste_adopcion")
     private BigDecimal costeAdopcion;
     @Basic(optional = false)
@@ -153,7 +149,6 @@ public class Mascotas implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Mascotas)) {
             return false;
         }

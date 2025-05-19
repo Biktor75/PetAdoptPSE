@@ -38,10 +38,8 @@ public class MascotaView implements Serializable {
             if (loginView.getAuthenticatedUser() != null) {
                 cargarMascotas();
             } else {
-                System.err.println("⚠️ Usuario no autenticado en MascotaView");
             }
         } catch (Exception e) {
-            System.err.println("❌ ERROR en init() de MascotaView:");
             e.printStackTrace();
         }
     }
@@ -49,14 +47,11 @@ public class MascotaView implements Serializable {
     public void cargarMascotas() {
         try {
             String email = loginView.getAuthenticatedUser().getEmail();
-            System.out.println("🔍 Cargando mascotas del refugio: " + email);
 
             // Solo traer las que no han sido adoptadas
             mascotas = getMascotasDisponibles(email);
 
-            System.out.println("✅ Mascotas cargadas: " + mascotas.size());
         } catch (Exception e) {
-            System.err.println("❌ Error al cargar mascotas:");
             e.printStackTrace();
         }
     }
@@ -80,20 +75,17 @@ public class MascotaView implements Serializable {
                 client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
                         .request()
                         .post(Entity.entity(mascotaSeleccionada, MediaType.APPLICATION_JSON));
-                System.out.println("✅ Nueva mascota creada");
             } else {
                 // Editar
                 client.target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.mascotas")
                         .path(String.valueOf(mascotaSeleccionada.getId()))
                         .request()
                         .put(Entity.entity(mascotaSeleccionada, MediaType.APPLICATION_JSON));
-                System.out.println("✅ Mascota actualizada");
             }
 
             cargarMascotas();
             return "/refugios/mascotas.xhtml?faces-redirect=true";
         } catch (Exception e) {
-            System.err.println("❌ Error al guardar mascota:");
             e.printStackTrace();
             return null;
         }

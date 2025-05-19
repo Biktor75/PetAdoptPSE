@@ -45,7 +45,6 @@ public class AdopcionService {
             return "/adopcion/exito.xhtml?faces-redirect=true";
 
         } catch (Exception e) {
-            System.err.println("❌ Error al enviar solicitud de adopción:");
             e.printStackTrace();
             return null;
         }
@@ -53,7 +52,6 @@ public class AdopcionService {
 
     public List<SolicitudesAdopcion> getSolicitudesDelCliente() {
         String email = loginView.getAuthenticatedUser().getEmail();
-        System.out.println("📩 Buscando solicitudes para: " + email);
 
         List<SolicitudesAdopcion> resultado = client
                 .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.solicitudesadopcion/cliente/" + email)
@@ -61,7 +59,6 @@ public class AdopcionService {
                 .get(new GenericType<List<SolicitudesAdopcion>>() {
                 });
 
-        System.out.println("📋 Solicitudes encontradas: " + resultado.size());
         return resultado;
     }
 
@@ -121,10 +118,8 @@ public class AdopcionService {
                 }
             }
 
-            System.out.println("❌ Error inesperado al consultar lista negra. Código: " + response.getStatus());
             return true; // Por seguridad, se deniega
         } catch (Exception e) {
-            System.out.println("❌ Excepción al consultar lista negra:");
             e.printStackTrace();
             return true;
         }

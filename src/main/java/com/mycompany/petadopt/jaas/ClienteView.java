@@ -25,20 +25,10 @@ public class ClienteView implements Serializable {
 
     @PostConstruct
     public void init() {
-        System.out.println("🟡 ClienteView inicializado");
 
         if (loginView.getAuthenticatedUser() != null) {
             String email = loginView.getAuthenticatedUser().getEmail();
-            System.out.println("🔍 Buscando cliente con email: " + email);
             this.cliente = userEJB.findClienteByEmail(email);
-
-            if (cliente != null) {
-                System.out.println("✅ Cliente encontrado: NIF = " + cliente.getNif());
-            } else {
-                System.out.println("❌ No se encontró cliente");
-            }
-        } else {
-            System.out.println("❌ Usuario no autenticado");
         }
     }
 
@@ -74,13 +64,11 @@ public class ClienteView implements Serializable {
     }
 
     public void guardarTelefono() {
-        System.out.println("📞 Guardando teléfono: " + cliente.getTelefono());
         actualizarCliente();
         this.editandoTelefono = false;
     }
 
     public void guardarDomicilio() {
-        System.out.println("🏠 Guardando domicilio: " + cliente.getDomicilio());
         actualizarCliente();
         this.editandoDomicilio = false;
     }
@@ -90,14 +78,8 @@ public class ClienteView implements Serializable {
             String email = cliente.getEmail();
 
             if (email == null || email.trim().isEmpty()) {
-                System.err.println("❌ Email del cliente es null o vacío. No se puede actualizar.");
                 return;
             }
-
-            System.out.println("💾 Actualizando datos del cliente:");
-            System.out.println("📧 Email: " + email);
-            System.out.println("🏠 Domicilio: " + cliente.getDomicilio());
-            System.out.println("📞 Teléfono: " + cliente.getTelefono());
 
             javax.ws.rs.client.Client client = javax.ws.rs.client.ClientBuilder.newClient();
 
@@ -110,20 +92,10 @@ public class ClienteView implements Serializable {
             int status = response.getStatus();
             String body = response.readEntity(String.class);
 
-            System.out.println("🔁 Código de respuesta HTTP: " + status);
-            System.out.println("📦 Cuerpo de respuesta: " + body);
-
-            if (status == 200 || status == 204) {
-                System.out.println("✅ Datos del cliente actualizados correctamente.");
-            } else {
-                System.err.println("❌ Error al guardar cliente: Código " + status);
-            }
-
             response.close();
             client.close();
 
         } catch (Exception e) {
-            System.err.println("❌ Excepción al actualizar cliente:");
             e.printStackTrace();
         }
     }

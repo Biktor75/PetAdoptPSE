@@ -12,10 +12,7 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- *
- * @author victo
- */
+
 @Embeddable
 public class UserGroupsPK implements Serializable {
 
@@ -65,7 +62,6 @@ public class UserGroupsPK implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof UserGroupsPK)) {
             return false;
         }

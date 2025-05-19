@@ -20,10 +20,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-/**
- *
- * @author victo
- */
 @Stateless
 @Path("com.mycompany.petadopt.entities.refugios")
 public class RefugiosFacadeREST extends AbstractFacade<Refugios> {
@@ -87,5 +83,5 @@ public class RefugiosFacadeREST extends AbstractFacade<Refugios> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

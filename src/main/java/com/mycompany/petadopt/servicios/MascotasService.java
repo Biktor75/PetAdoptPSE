@@ -29,13 +29,13 @@ public class MascotasService {
     }
 
     public List<SolicitudesAdopcion> getTodasSolicitudes() {
-        Client client = ClientBuilder.newClient(); // ← construirlo aquí
+        Client client = ClientBuilder.newClient(); 
         List<SolicitudesAdopcion> solicitudes = client
                 .target("http://localhost:8080/PetAdopt/webresources/com.mycompany.petadopt.entities.solicitudesadopcion")
                 .request(MediaType.APPLICATION_JSON)
                 .get(new GenericType<List<SolicitudesAdopcion>>() {
                 });
-        client.close(); // buena práctica
+        client.close(); 
         return solicitudes;
     }
 

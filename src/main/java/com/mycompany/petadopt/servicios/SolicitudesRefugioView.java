@@ -16,10 +16,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-/**
- *
- * @author victo
- */
+
 @Named
 @RequestScoped
 public class SolicitudesRefugioView {
@@ -35,7 +32,6 @@ public class SolicitudesRefugioView {
 
     @PostConstruct
     public void init() {
-        System.out.println("✅ Bean SolicitudesRefugioView inicializado");
         String emailRefugio = loginView.getAuthenticatedUser().getEmail();
         solicitudes = adopcionService.getSolicitudesPorRefugio(emailRefugio);
         mascotasPorId = new HashMap<>();

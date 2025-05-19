@@ -22,10 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 
-/**
- *
- * @author victo
- */
+
 @Stateless
 @Path("com.mycompany.petadopt.entities.usergroups")
 public class UserGroupsFacadeREST extends AbstractFacade<UserGroups> {

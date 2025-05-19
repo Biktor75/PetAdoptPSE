@@ -31,20 +31,10 @@ public class RefugioView implements Serializable {
 
     @PostConstruct
     public void init() {
-        System.out.println("🟡 RefugioView inicializado");
 
         if (loginView.getAuthenticatedUser() != null) {
             String email = loginView.getAuthenticatedUser().getEmail();
-            System.out.println("🔍 Buscando refugio con email: " + email);
             this.refugio = userEJB.findRefugioByEmail(email);
-
-            if (refugio != null) {
-                System.out.println("✅ Refugio encontrado: CIF = " + refugio.getCif());
-            } else {
-                System.out.println("❌ No se encontró ningún refugio con ese email");
-            }
-        } else {
-            System.out.println("❌ Usuario no autenticado en LoginView");
         }
     }
 
@@ -57,17 +47,8 @@ public class RefugioView implements Serializable {
             String email = refugio.getEmail();
 
             if (email == null || email.trim().isEmpty()) {
-                System.err.println("❌ Email del refugio es null o vacío. No se puede actualizar.");
                 return;
             }
-
-            // Mostramos todos los datos que vamos a enviar
-            System.out.println("💾 Enviando datos actualizados del refugio:");
-            System.out.println("📧 Email: " + email);
-            System.out.println("🏠 Domicilio: " + refugio.getDomicilio());
-            System.out.println("📞 Teléfono: " + refugio.getTelefono());
-            System.out.println("📜 CIF: " + refugio.getCif());
-            System.out.println("✅ Autorizado: " + refugio.getAutorizado());
 
             javax.ws.rs.client.Client client = javax.ws.rs.client.ClientBuilder.newClient();
 
@@ -80,20 +61,10 @@ public class RefugioView implements Serializable {
             int status = response.getStatus();
             String body = response.readEntity(String.class); // intenta leer cuerpo de respuesta si lo hay
 
-            System.out.println("🔁 Código de respuesta HTTP: " + status);
-            System.out.println("📦 Cuerpo de respuesta: " + body);
-
-            if (status == 200 || status == 204) {
-                System.out.println("✅ Datos del refugio actualizados correctamente.");
-            } else {
-                System.err.println("❌ Error al guardar: Código " + status);
-            }
-
             response.close();
             client.close();
 
         } catch (Exception e) {
-            System.err.println("❌ Excepción al actualizar datos del refugio:");
             e.printStackTrace();
         }
     }

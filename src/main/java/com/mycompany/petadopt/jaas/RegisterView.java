@@ -18,7 +18,7 @@ import java.util.Date;
 @RequestScoped
 public class RegisterView implements Serializable {
 
-    private String tipoUsuario; // ⚠️ Sin valor por defecto
+    private String tipoUsuario;
 
     // Comunes
     private String email;
@@ -40,9 +40,6 @@ public class RegisterView implements Serializable {
     private UserEJB userEJB;
 
     public String registrar() {
-        System.out.println("🚀 MÉTODO REGISTRAR EJECUTADO");
-        System.out.println("📌 tipoUsuario: " + tipoUsuario);
-        System.out.println("📅 fechaNacimiento: " + fechaNacimiento);
 
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -94,7 +91,9 @@ public class RegisterView implements Serializable {
     }
 
     private boolean esMayorEdad(Date fechaNacimiento) {
-        if (fechaNacimiento == null) return false;
+        if (fechaNacimiento == null) {
+            return false;
+        }
         LocalDate fechaNac = fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return fechaNac.isBefore(LocalDate.now().minusYears(18));
     }
@@ -104,37 +103,91 @@ public class RegisterView implements Serializable {
     }
 
     // Getters y setters
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
 
-    public String getTipoUsuario() { return tipoUsuario; }
-    public void setTipoUsuario(String tipoUsuario) { this.tipoUsuario = tipoUsuario; }
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getConfirmPassword() { return confirmPassword; }
-    public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
+    public String getPassword() {
+        return password;
+    }
 
-    public String getDomicilio() { return domicilio; }
-    public void setDomicilio(String domicilio) { this.domicilio = domicilio; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
-    public String getApellidos() { return apellidos; }
-    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
+    public String getDomicilio() {
+        return domicilio;
+    }
 
-    public String getNif() { return nif; }
-    public void setNif(String nif) { this.nif = nif; }
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
+    }
 
-    public Date getFechaNacimiento() { return fechaNacimiento; }
-    public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+    public String getTelefono() {
+        return telefono;
+    }
 
-    public String getCif() { return cif; }
-    public void setCif(String cif) { this.cif = cif; }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getNif() {
+        return nif;
+    }
+
+    public void setNif(String nif) {
+        this.nif = nif;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getCif() {
+        return cif;
+    }
+
+    public void setCif(String cif) {
+        this.cif = cif;
+    }
 }
